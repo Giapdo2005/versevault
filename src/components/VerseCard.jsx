@@ -4,29 +4,35 @@
 //   - Practice button navigates to /practice/:id
 //   - Status badge shows mastered / learning / nothing
 
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import styles from './VerseCard.module.css'
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import styles from "./VerseCard.module.css";
 
 // Status badge config — maps status string to label + style
 const STATUS = {
-  mastered:  { label: 'Mastered',       className: styles.badgeMastered },
-  learning:  { label: 'Still learning', className: styles.badgeLearning },
-}
+  mastered: { label: "Mastered", className: styles.badgeMastered },
+  learning: { label: "Still learning", className: styles.badgeLearning },
+  needToLearn: { label: "Need to Learn", className: styles.badgeStart },
+};
 
 function VerseCard({ verse, onDelete }) {
-  const [confirming, setConfirming] = useState(false)
+  const [confirming, setConfirming] = useState(false);
 
-  function handleDeleteClick() { setConfirming(true) }
-  function handleCancel()      { setConfirming(false) }
-  function handleConfirm()     { onDelete(verse.id) }
+  function handleDeleteClick() {
+    setConfirming(true);
+  }
+  function handleCancel() {
+    setConfirming(false);
+  }
+  function handleConfirm() {
+    onDelete(verse.id);
+  }
 
   // Look up badge info — undefined if no status set yet
-  const badge = STATUS[verse.status]
+  const badge = STATUS[verse.status];
 
   return (
     <li className={styles.card}>
-
       {/* Status badge — only renders if the verse has a status */}
       {badge && (
         <span className={`${styles.badge} ${badge.className}`}>
@@ -45,10 +51,7 @@ function VerseCard({ verse, onDelete }) {
             We embed the verse's id in the URL so Practice.jsx
             knows which verse to load via useParams.
           */}
-          <Link
-            to={`/practice/${verse.id}`}
-            className={styles.practiceLink}
-          >
+          <Link to={`/practice/${verse.id}`} className={styles.practiceLink}>
             Practice
           </Link>
 
@@ -69,9 +72,8 @@ function VerseCard({ verse, onDelete }) {
           )}
         </div>
       </div>
-
     </li>
-  )
+  );
 }
 
-export default VerseCard
+export default VerseCard;

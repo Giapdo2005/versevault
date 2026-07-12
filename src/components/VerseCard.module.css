@@ -29,13 +29,18 @@
 }
 
 .badgeMastered {
-  background-color: #E6F4EC;
-  color: #2D7D46;
+  background-color: #e6f4ec;
+  color: #2d7d46;
 }
 
 .badgeLearning {
-  background-color: #FEF3E2;
-  color: #B45309;
+  background-color: #fef3e2;
+  color: #b45309;
+}
+
+.badgeStart {
+  background-color: #f0d7d4;
+  color: #b41a09;
 }
 
 .verseText {
@@ -99,7 +104,9 @@
   transition: color 0.15s ease;
 }
 
-.deleteButton:hover { color: var(--color-danger); }
+.deleteButton:hover {
+  color: var(--color-danger);
+}
 
 .confirmRow {
   display: flex;
@@ -119,14 +126,16 @@
   font-weight: 500;
   color: var(--color-muted);
   background: none;
-  border: 1.5px solid #D1D9E4;
+  border: 1.5px solid #d1d9e4;
   border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-3);
   cursor: pointer;
   transition: border-color 0.15s ease;
 }
 
-.cancelButton:hover { border-color: var(--color-muted); }
+.cancelButton:hover {
+  border-color: var(--color-muted);
+}
 
 .confirmButton {
   font-family: var(--font-sans);
@@ -142,4 +151,6 @@
   transition: opacity 0.15s ease;
 }
 
-.confirmButton:hover { opacity: 1; }
+.confirmButton:hover {
+  opacity: 1;
+}
