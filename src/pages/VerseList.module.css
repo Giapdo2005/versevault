@@ -1,0 +1,65 @@
+/* src/pages/VerseList.module.css */
+
+.page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.addLink {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-gold);
+  text-decoration: none;
+}
+
+.addLink:hover {
+  text-decoration: underline;
+}
+
+.count {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  margin-top: calc(-1 * var(--space-6)); /* pull up slightly under title */
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* --- Empty state --- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--color-muted);
+}
+
+.emptyLink {
+  color: var(--color-gold);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.emptyLink:hover {
+  text-decoration: underline;
+}

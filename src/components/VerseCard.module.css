@@ -1,0 +1,145 @@
+/* src/components/VerseCard.module.css */
+
+.card {
+  background-color: var(--color-surface);
+  border-left: 4px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  padding: var(--space-6) var(--space-8);
+  box-shadow: 0 2px 12px rgba(27, 42, 74, 0.07);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  transition: box-shadow 0.15s ease;
+  position: relative; /* needed for badge positioning */
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(27, 42, 74, 0.12);
+}
+
+/* --- Status badge --- */
+.badge {
+  align-self: flex-start; /* don't stretch full width */
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px var(--space-3);
+  border-radius: 999px; /* pill shape */
+}
+
+.badgeMastered {
+  background-color: #E6F4EC;
+  color: #2D7D46;
+}
+
+.badgeLearning {
+  background-color: #FEF3E2;
+  color: #B45309;
+}
+
+.verseText {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--color-navy);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.verseRef {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gold);
+  letter-spacing: 0.03em;
+}
+
+/* Actions sits on the right side of the footer */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.practiceLink {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-navy);
+  text-decoration: none;
+  padding: var(--space-1) var(--space-3);
+  border: 1.5px solid var(--color-navy);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.practiceLink:hover {
+  background-color: var(--color-navy);
+  color: var(--color-bg);
+}
+
+.deleteButton {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: color 0.15s ease;
+}
+
+.deleteButton:hover { color: var(--color-danger); }
+
+.confirmRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.confirmLabel {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-danger);
+}
+
+.cancelButton {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-muted);
+  background: none;
+  border: 1.5px solid #D1D9E4;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.cancelButton:hover { border-color: var(--color-muted); }
+
+.confirmButton {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+  background-color: var(--color-danger);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  opacity: 0.9;
+  transition: opacity 0.15s ease;
+}
+
+.confirmButton:hover { opacity: 1; }

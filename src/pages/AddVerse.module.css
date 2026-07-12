@@ -1,0 +1,104 @@
+/* src/pages/AddVerse.module.css */
+
+.page {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.subtitle {
+  color: var(--color-muted);
+  font-size: 0.95rem;
+}
+
+/* --- Form --- */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-navy);
+  letter-spacing: 0.03em;
+}
+
+.input,
+.textarea {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--color-navy);
+  background-color: var(--color-surface);
+  border: 1.5px solid #D1D9E4;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.textarea {
+  /* Use the serif font for verse text — helps the user feel the scripture */
+  font-family: var(--font-serif);
+  resize: vertical; /* let the user resize vertically only */
+  line-height: 1.7;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+/* --- Error message --- */
+.error {
+  font-size: 0.875rem;
+  color: var(--color-danger);
+  padding: var(--space-3) var(--space-4);
+  background-color: #fdf2f2;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-danger);
+}
+
+/* --- Submit button --- */
+.button {
+  align-self: flex-start;
+  padding: var(--space-3) var(--space-8);
+  background-color: var(--color-navy);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button:hover {
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+}

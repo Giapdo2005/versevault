@@ -1,0 +1,132 @@
+/* src/pages/Practice.module.css */
+
+.page {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--space-16) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  align-items: center; /* center everything horizontally */
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+.reference {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: var(--color-muted);
+}
+
+/* --- Verse card --- */
+.card {
+  width: 100%;
+  background-color: var(--color-surface);
+  border-left: 4px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  box-shadow: 0 2px 12px rgba(27, 42, 74, 0.07);
+  text-align: left;
+}
+
+.verseText {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  line-height: 1.9;
+  color: var(--color-navy);
+  font-style: italic;
+}
+
+/* --- Blank underscores ---
+   Each word is replaced by a <span> of underscores.
+   We add a small gap between spans so they read like separate words.
+*/
+.blank {
+  display: inline-block;
+  margin-right: 6px;
+  color: var(--color-muted);
+  letter-spacing: 2px; /* spread underscores slightly for readability */
+  font-style: normal;
+}
+
+/* --- Buttons --- */
+.revealButton {
+  padding: var(--space-3) var(--space-12);
+  background-color: var(--color-navy);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.revealButton:hover {
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.ratingRow {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.stillLearningButton {
+  padding: var(--space-3) var(--space-6);
+  background-color: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1.5px solid #D1D9E4;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.stillLearningButton:hover {
+  border-color: var(--color-muted);
+  color: var(--color-navy);
+}
+
+.gotItButton {
+  padding: var(--space-3) var(--space-6);
+  background-color: #2D7D46;
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.gotItButton:hover {
+  opacity: 0.88;
+}
+
+.notFound {
+  color: var(--color-muted);
+}

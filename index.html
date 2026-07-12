@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VerseVault</title>
+
+    <!--
+      Google Fonts: we load two typefaces here.
+      - Lora: a serif font used for scripture text. Serifs have a long
+        history in printed Bibles and feel authoritative and readable.
+      - Inter: a clean sans-serif for UI elements like buttons and labels.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!--
+      This single <div id="root"> is where React will mount the entire app.
+      React takes over this element and renders everything inside it.
+    -->
+    <div id="root"></div>
+
+    <!--
+      Vite's entry point. This tells the browser to load our React app.
+      "type=module" means it uses modern ES module syntax (import/export).
+    -->
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

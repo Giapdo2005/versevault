@@ -1,0 +1,59 @@
+/*
+  Navbar.module.css
+  -----------------
+  CSS Modules means these class names are locally scoped to Navbar.jsx.
+  Even if another file uses `.header`, they won't conflict.
+  Vite transforms `.header` into something like `.header_x7k2a` behind
+  the scenes — unique per file.
+*/
+
+.header {
+  background-color: var(--color-navy);
+  /* A subtle gold bottom border ties it to our accent color */
+  border-bottom: 3px solid var(--color-gold);
+  position: sticky; /* stays at the top as you scroll */
+  top: 0;
+  z-index: 100;    /* sits above all other content */
+}
+
+.inner {
+  /* Centers content and caps the max width so lines don't get too long */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  text-decoration: none; /* remove underline from the link */
+  letter-spacing: 0.02em;
+}
+
+.brand:hover {
+  opacity: 0.85;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-6); /* space between nav links */
+}
+
+.link {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-bg); /* parchment on navy — readable but soft */
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: var(--color-gold);
+}
