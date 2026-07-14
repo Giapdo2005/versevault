@@ -19,6 +19,7 @@ function AddVerse() {
   const [formData, setFormData] = useState({
     reference: "",
     text: "",
+    translation: "",
   });
 
   // `error` holds a message to show the user if something goes wrong.
@@ -47,8 +48,12 @@ function AddVerse() {
     e.preventDefault();
 
     // Basic validation — both fields must have content
-    if (!formData.reference.trim() || !formData.text.trim()) {
-      setError("Please fill in both the reference and the verse text.");
+    if (
+      !formData.reference.trim() ||
+      !formData.text.trim() ||
+      !formData.translation.trim()
+    ) {
+      setError("Please fill in reference, verse text, and the translation.");
       return;
     }
 
@@ -56,6 +61,7 @@ function AddVerse() {
     saveVerse({
       reference: formData.reference.trim(),
       text: formData.text.trim(),
+      translation: formData.translation.trim().toUpperCase(),
     });
 
     // Navigate to the verse list page
@@ -68,7 +74,7 @@ function AddVerse() {
       <div className={styles.header}>
         <h1 className={styles.title}>Add a Verse</h1>
         <p className={styles.subtitle}>
-          Type the reference and the verse text from your ESV Bible.
+          Type the reference and the verse text.
         </p>
       </div>
 
@@ -112,7 +118,26 @@ function AddVerse() {
             rows={5}
           />
         </div>
-
+        <div className={styles.field}>
+          <label className={styles.label} htmlFor="translation">
+            Translation
+          </label>
+          {/*
+            This is a "controlled input" — React owns the value.
+            `value={formData.reference}` ties the input to our state.
+            `onChange={handleChange}` updates state on every keystroke.
+            Without both of these together, the input and state go out of sync.
+          */}
+          <input
+            id="translation"
+            name="translation"
+            type="text"
+            className={styles.input}
+            placeholder="e.g. ESV, LSB, NASB95"
+            value={formData.translation}
+            onChange={handleChange}
+          />
+        </div>
         {/* Only render the error message if there is one */}
         {error && <p className={styles.error}>{error}</p>}
 

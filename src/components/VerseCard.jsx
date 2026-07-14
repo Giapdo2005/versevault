@@ -43,7 +43,9 @@ function VerseCard({ verse, onDelete }) {
       <p className={styles.verseText}>{verse.text}</p>
 
       <div className={styles.footer}>
-        <p className={styles.verseRef}>{verse.reference} · ESV</p>
+        <p className={styles.verseRef}>
+          {verse.reference} · {verse.translation}
+        </p>
 
         <div className={styles.actions}>
           {/*

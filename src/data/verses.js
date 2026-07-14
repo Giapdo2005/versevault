@@ -36,7 +36,7 @@ export function saveVerse(verse) {
     id: Date.now(),
     createdAt: new Date().toISOString(),
     status: "needToLearn",
-    ...verse, // spread the incoming fields (reference, text) in
+    ...verse, // spread the incoming fields (reference, text, translation) in
   };
 
   const updated = [...existing, newVerse];
