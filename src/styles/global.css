@@ -1,48 +1,27 @@
-/*
-  global.css
-  ----------
-  This file is loaded once and applies to the entire app.
-  We define our design tokens (colors, fonts, spacing) as CSS custom
-  properties (variables) on :root so every other file can use them.
-  Changing a value here changes it everywhere — that's the power of tokens.
-*/
-
 :root {
-  /* --- Color palette --- */
-  --color-bg:        #F5F0E8; /* warm parchment — the page background */
-  --color-surface:   #FFFFFF; /* pure white — for cards and panels */
-  --color-navy:      #1B2A4A; /* deep navy — primary text and header */
-  --color-gold:      #C9A84C; /* warm gold — accent, borders, highlights */
-  --color-muted:     #8A9BB0; /* soft blue-gray — secondary/helper text */
-  --color-danger:    #C0392B; /* red — errors or destructive actions */
+  --color-bg:      #F5F0E8;
+  --color-surface: #FFFFFF;
+  --color-navy:    #1B2A4A;
+  --color-gold:    #C9A84C;
+  --color-muted:   #8A9BB0;
+  --color-danger:  #C0392B;
 
-  /* --- Typography --- */
-  --font-serif:  'Lora', Georgia, serif;       /* for scripture text */
-  --font-sans:   'Inter', system-ui, sans-serif; /* for UI elements */
+  --font-serif: 'Lora', Georgia, serif;
+  --font-sans:  'Inter', system-ui, sans-serif;
 
-  /* --- Spacing scale ---
-     We use a base-4 scale. Every spacing value is a multiple of 4px.
-     This keeps layouts consistent without eyeballing gaps.
-  */
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
   --space-12: 48px;
   --space-16: 64px;
 
-  /* --- Border radius --- */
   --radius-sm: 4px;
   --radius-md: 8px;
 }
 
-/* --- Reset ---
-   Browsers apply their own default styles. We zero them out so we
-   start from a predictable baseline. box-sizing: border-box means
-   padding and border are included in an element's total width/height.
-*/
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -55,18 +34,8 @@ body {
   font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.6;
-
-  /* Centers content vertically if the page is taller than content */
   min-height: 100vh;
 }
 
-/* Remove default list bullets — we'll style lists ourselves */
-ul, ol {
-  list-style: none;
-}
-
-/* Make images responsive by default */
-img {
-  max-width: 100%;
-  display: block;
-}
+ul, ol { list-style: none; }
+img { max-width: 100%; display: block; }

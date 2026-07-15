@@ -1,5 +1,3 @@
-/* src/components/VerseCard.module.css */
-
 .card {
   background-color: var(--color-surface);
   border-left: 4px solid var(--color-gold);
@@ -10,39 +8,26 @@
   flex-direction: column;
   gap: var(--space-4);
   transition: box-shadow 0.15s ease;
-  position: relative; /* needed for badge positioning */
 }
 
-.card:hover {
-  box-shadow: 0 4px 20px rgba(27, 42, 74, 0.12);
-}
+.card:hover { box-shadow: 0 4px 20px rgba(27, 42, 74, 0.12); }
 
-/* --- Status badge --- */
+/* --- Badge --- */
 .badge {
-  align-self: flex-start; /* don't stretch full width */
+  align-self: flex-start;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 2px var(--space-3);
-  border-radius: 999px; /* pill shape */
+  border-radius: 999px;
 }
 
-.badgeMastered {
-  background-color: #e6f4ec;
-  color: #2d7d46;
-}
+.badgeNeedToLearn { background-color: #F1F5F9; color: #64748B; }
+.badgeLearning    { background-color: #FEF3E2; color: #B45309; }
+.badgeMastered    { background-color: #E6F4EC; color: #2D7D46; }
 
-.badgeLearning {
-  background-color: #fef3e2;
-  color: #b45309;
-}
-
-.badgeStart {
-  background-color: #f0d7d4;
-  color: #b41a09;
-}
-
+/* --- Verse text --- */
 .verseText {
   font-family: var(--font-serif);
   font-size: 1.1rem;
@@ -51,6 +36,7 @@
   color: var(--color-navy);
 }
 
+/* --- Footer --- */
 .footer {
   display: flex;
   align-items: center;
@@ -60,14 +46,12 @@
 }
 
 .verseRef {
-  font-family: var(--font-sans);
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-gold);
   letter-spacing: 0.03em;
 }
 
-/* Actions sits on the right side of the footer */
 .actions {
   display: flex;
   align-items: center;
@@ -92,7 +76,6 @@
 }
 
 .deleteButton {
-  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--color-muted);
@@ -100,13 +83,10 @@
   border: none;
   cursor: pointer;
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
   transition: color 0.15s ease;
 }
 
-.deleteButton:hover {
-  color: var(--color-danger);
-}
+.deleteButton:hover { color: var(--color-danger); }
 
 .confirmRow {
   display: flex;
@@ -121,24 +101,20 @@
 }
 
 .cancelButton {
-  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 500;
   color: var(--color-muted);
   background: none;
-  border: 1.5px solid #d1d9e4;
+  border: 1.5px solid #D1D9E4;
   border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-3);
   cursor: pointer;
   transition: border-color 0.15s ease;
 }
 
-.cancelButton:hover {
-  border-color: var(--color-muted);
-}
+.cancelButton:hover { border-color: var(--color-muted); }
 
 .confirmButton {
-  font-family: var(--font-sans);
   font-size: 0.8rem;
   font-weight: 500;
   color: white;
@@ -151,6 +127,4 @@
   transition: opacity 0.15s ease;
 }
 
-.confirmButton:hover {
-  opacity: 1;
-}
+.confirmButton:hover { opacity: 1; }

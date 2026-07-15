@@ -1,6 +1,4 @@
-// src/App.jsx
 import { Routes, Route } from 'react-router-dom'
-
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import AddVerse from './pages/AddVerse'
@@ -16,12 +14,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/add" element={<AddVerse />} />
           <Route path="/verses" element={<VerseList />} />
-
-          {/*
-            :id is a dynamic segment — it matches any value in that position.
-            /practice/123, /practice/456 all match this one route.
-            Inside Practice.jsx, useParams() lets us read what :id actually is.
-          */}
+          {/* :id is a dynamic segment — useParams() reads it in Practice.jsx */}
           <Route path="/practice/:id" element={<Practice />} />
         </Routes>
       </main>

@@ -1,0 +1,78 @@
+/* src/components/ProgressBar.module.css */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 12px rgba(27, 42, 74, 0.07);
+}
+
+/* --- Stat chips --- */
+.stats {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Colored dot next to each label.
+   We use data-status attribute to set the color per status.
+   This avoids needing three separate dot classes.
+*/
+.statDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.statDot[data-status="needToLearn"] { background-color: #CBD5E1; }
+.statDot[data-status="learning"]    { background-color: #F59E0B; }
+.statDot[data-status="mastered"]    { background-color: #2D7D46; }
+
+.statLabel {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.statCount {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+/* --- Progress bar track --- */
+.track {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden; /* clips segments to rounded corners */
+  background-color: #F1F5F9; /* fallback if all widths are 0 */
+  gap: 2px;
+}
+
+.segment {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.4s ease; /* animates when counts change */
+}
+
+.segmentNeedToLearn { background-color: #CBD5E1; }
+.segmentLearning    { background-color: #F59E0B; }
+.segmentMastered    { background-color: #2D7D46; }
+
+/* --- Total --- */
+.total {
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  text-align: right;
+}

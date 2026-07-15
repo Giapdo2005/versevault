@@ -1,39 +1,28 @@
 // src/components/VerseCard.jsx
-//
-// Updated for Feature 4:
-//   - Practice button navigates to /practice/:id
-//   - Status badge shows mastered / learning / nothing
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import styles from './VerseCard.module.css'
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./VerseCard.module.css";
-
-// Status badge config — maps status string to label + style
+// Maps status value to display label and CSS class
 const STATUS = {
-  mastered: { label: "Mastered", className: styles.badgeMastered },
-  learning: { label: "Still learning", className: styles.badgeLearning },
-  needToLearn: { label: "Need to Learn", className: styles.badgeStart },
-};
+  needToLearn: { label: 'Need to learn',  className: styles.badgeNeedToLearn },
+  learning:    { label: 'Still learning', className: styles.badgeLearning },
+  mastered:    { label: 'Mastered',       className: styles.badgeMastered },
+}
 
 function VerseCard({ verse, onDelete }) {
-  const [confirming, setConfirming] = useState(false);
+  const [confirming, setConfirming] = useState(false)
 
-  function handleDeleteClick() {
-    setConfirming(true);
-  }
-  function handleCancel() {
-    setConfirming(false);
-  }
-  function handleConfirm() {
-    onDelete(verse.id);
-  }
+  function handleDeleteClick() { setConfirming(true) }
+  function handleCancel()      { setConfirming(false) }
+  function handleConfirm()     { onDelete(verse.id) }
 
-  // Look up badge info — undefined if no status set yet
-  const badge = STATUS[verse.status];
+  const badge = STATUS[verse.status]
 
   return (
     <li className={styles.card}>
-      {/* Status badge — only renders if the verse has a status */}
+
+      {/* Status badge — only renders if verse has a recognised status */}
       {badge && (
         <span className={`${styles.badge} ${badge.className}`}>
           {badge.label}
@@ -44,15 +33,10 @@ function VerseCard({ verse, onDelete }) {
 
       <div className={styles.footer}>
         <p className={styles.verseRef}>
-          {verse.reference} · {verse.translation}
+          {verse.reference} · {verse.translation || 'ESV'}
         </p>
 
         <div className={styles.actions}>
-          {/*
-            Link to the practice page for this specific verse.
-            We embed the verse's id in the URL so Practice.jsx
-            knows which verse to load via useParams.
-          */}
           <Link to={`/practice/${verse.id}`} className={styles.practiceLink}>
             Practice
           </Link>
@@ -60,22 +44,17 @@ function VerseCard({ verse, onDelete }) {
           {confirming ? (
             <div className={styles.confirmRow}>
               <span className={styles.confirmLabel}>Are you sure?</span>
-              <button className={styles.cancelButton} onClick={handleCancel}>
-                Cancel
-              </button>
-              <button className={styles.confirmButton} onClick={handleConfirm}>
-                Yes, delete
-              </button>
+              <button className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
+              <button className={styles.confirmButton} onClick={handleConfirm}>Yes, delete</button>
             </div>
           ) : (
-            <button className={styles.deleteButton} onClick={handleDeleteClick}>
-              Delete
-            </button>
+            <button className={styles.deleteButton} onClick={handleDeleteClick}>Delete</button>
           )}
         </div>
       </div>
+
     </li>
-  );
+  )
 }
 
-export default VerseCard;
+export default VerseCard

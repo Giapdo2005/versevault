@@ -1,5 +1,3 @@
-/* src/pages/Practice.module.css */
-
 .page {
   max-width: 680px;
   margin: 0 auto;
@@ -7,15 +5,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-8);
-  align-items: center; /* center everything horizontally */
+  align-items: center;
   text-align: center;
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
+.header { display: flex; flex-direction: column; gap: var(--space-2); }
 
 .eyebrow {
   font-size: 0.8rem;
@@ -32,12 +26,8 @@
   color: var(--color-navy);
 }
 
-.hint {
-  font-size: 0.9rem;
-  color: var(--color-muted);
-}
+.hint { font-size: 0.9rem; color: var(--color-muted); }
 
-/* --- Verse card --- */
 .card {
   width: 100%;
   background-color: var(--color-surface);
@@ -56,19 +46,14 @@
   font-style: italic;
 }
 
-/* --- Blank underscores ---
-   Each word is replaced by a <span> of underscores.
-   We add a small gap between spans so they read like separate words.
-*/
 .blank {
   display: inline-block;
   margin-right: 6px;
   color: var(--color-muted);
-  letter-spacing: 2px; /* spread underscores slightly for readability */
+  letter-spacing: 2px;
   font-style: normal;
 }
 
-/* --- Buttons --- */
 .revealButton {
   padding: var(--space-3) var(--space-12);
   background-color: var(--color-navy);
@@ -87,10 +72,7 @@
   color: var(--color-navy);
 }
 
-.ratingRow {
-  display: flex;
-  gap: var(--space-4);
-}
+.ratingRow { display: flex; gap: var(--space-4); }
 
 .stillLearningButton {
   padding: var(--space-3) var(--space-6);
@@ -123,10 +105,6 @@
   transition: opacity 0.15s ease;
 }
 
-.gotItButton:hover {
-  opacity: 0.88;
-}
+.gotItButton:hover { opacity: 0.88; }
 
-.notFound {
-  color: var(--color-muted);
-}
+.notFound { color: var(--color-muted); }
