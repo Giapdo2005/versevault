@@ -1,5 +1,10 @@
 // src/pages/VerseList.jsx
-import { useState } from 'react'
+//
+// Now fetches from Supabase instead of localStorage.
+// Key change: getVerses() is now async so we use useEffect to
+// fetch on mount, and a loading state while we wait.
+
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { getVerses, deleteVerse } from '../data/verses'
 import VerseCard from '../components/VerseCard'
@@ -7,35 +12,46 @@ import ProgressBar from '../components/ProgressBar'
 import styles from './VerseList.module.css'
 
 function VerseList() {
-  // useState(getVerses) — lazy initialization.
-  // Passes the function itself so React only calls it once on mount,
-  // not on every re-render.
-  const [verses, setVerses] = useState(getVerses)
+  const [verses, setVerses]   = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError]     = useState('')
 
-  function handleDelete(id) {
-    deleteVerse(id)
+  // useEffect runs after the component mounts.
+  // We use it here because we need to fetch data from the network —
+  // you can't do async work directly in the component body.
+  useEffect(() => {
+    async function fetchVerses() {
+      try {
+        const data = await getVerses()
+        setVerses(data)
+      } catch (err) {
+        setError('Failed to load verses.')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVerses()
+  }, []) // empty [] means run once on mount
+
+  async function handleDelete(id) {
+    await deleteVerse(id)
     setVerses((current) => current.filter((v) => v.id !== id))
   }
 
-  // Sort newest first — spread first to avoid mutating state directly
-  const sorted = [...verses].sort((a, b) => b.id - a.id)
+  if (loading) return <div className={styles.page}><p className={styles.state}>Loading...</p></div>
+  if (error)   return <div className={styles.page}><p className={styles.state}>{error}</p></div>
 
   return (
     <div className={styles.page}>
-
       <div className={styles.header}>
         <h1 className={styles.title}>My Verses</h1>
         <Link to="/add" className={styles.addLink}>+ Add verse</Link>
       </div>
 
-      {/*
-        ProgressBar receives the full verses array.
-        It calculates its own counts internally —
-        VerseList doesn't need to know the math.
-      */}
       <ProgressBar verses={verses} />
 
-      {sorted.length === 0 ? (
+      {verses.length === 0 ? (
         <div className={styles.empty}>
           <p>No verses saved yet.</p>
           <Link to="/add" className={styles.emptyLink}>Add your first verse →</Link>
@@ -46,17 +62,12 @@ function VerseList() {
             {verses.length} {verses.length === 1 ? 'verse' : 'verses'}
           </p>
           <ul className={styles.list}>
-            {sorted.map((verse) => (
-              <VerseCard
-                key={verse.id}
-                verse={verse}
-                onDelete={handleDelete}
-              />
+            {verses.map((verse) => (
+              <VerseCard key={verse.id} verse={verse} onDelete={handleDelete} />
             ))}
           </ul>
         </>
       )}
-
     </div>
   )
 }

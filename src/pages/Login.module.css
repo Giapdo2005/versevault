@@ -1,0 +1,108 @@
+/* src/pages/Login.module.css */
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  padding: var(--space-12) var(--space-8);
+  box-shadow: 0 4px 24px rgba(27, 42, 74, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.header { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.subtitle { font-size: 0.95rem; color: var(--color-muted); }
+
+.form { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.field { display: flex; flex-direction: column; gap: var(--space-2); }
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-navy);
+}
+
+.input {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--color-navy);
+  background-color: var(--color-bg);
+  border: 1.5px solid #D1D9E4;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-gold);
+}
+
+.error {
+  font-size: 0.875rem;
+  color: var(--color-danger);
+  padding: var(--space-3) var(--space-4);
+  background-color: #fdf2f2;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--color-danger);
+}
+
+.button {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-navy);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button:hover:not(:disabled) {
+  background-color: var(--color-gold);
+  color: var(--color-navy);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toggle {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: var(--color-gold);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: underline;
+}

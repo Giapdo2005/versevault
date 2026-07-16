@@ -7,22 +7,15 @@ import styles from './AddVerse.module.css'
 function AddVerse() {
   const navigate = useNavigate()
 
-  const [formData, setFormData] = useState({
-    reference: '',
-    text: '',
-    translation: '',
-  })
-
-  const [error, setError] = useState('')
+  const [formData, setFormData] = useState({ reference: '', text: '', translation: '' })
+  const [error, setError]       = useState('')
+  const [loading, setLoading]   = useState(false)
 
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     if (!formData.reference.trim() || !formData.text.trim() || !formData.translation.trim()) {
@@ -31,13 +24,19 @@ function AddVerse() {
     }
 
     setError('')
-    saveVerse({
-      reference:   formData.reference.trim(),
-      text:        formData.text.trim(),
-      translation: formData.translation.trim(),
-    })
+    setLoading(true)
 
-    navigate('/verses')
+    try {
+      await saveVerse({
+        reference:   formData.reference.trim(),
+        text:        formData.text.trim(),
+        translation: formData.translation.trim(),
+      })
+      navigate('/verses')
+    } catch (err) {
+      setError('Failed to save verse. Please try again.')
+      setLoading(false)
+    }
   }
 
   return (
@@ -48,50 +47,30 @@ function AddVerse() {
       </div>
 
       <form className={styles.form} onSubmit={handleSubmit}>
-
         <div className={styles.field}>
           <label className={styles.label} htmlFor="reference">Reference</label>
-          <input
-            id="reference"
-            name="reference"
-            type="text"
-            className={styles.input}
-            placeholder="e.g. John 3:16"
-            value={formData.reference}
-            onChange={handleChange}
-          />
+          <input id="reference" name="reference" type="text" className={styles.input}
+            placeholder="e.g. John 3:16" value={formData.reference} onChange={handleChange} />
         </div>
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="text">Verse Text</label>
-          <textarea
-            id="text"
-            name="text"
-            className={styles.textarea}
-            placeholder="Type the verse here..."
-            value={formData.text}
-            onChange={handleChange}
-            rows={5}
-          />
+          <textarea id="text" name="text" className={styles.textarea}
+            placeholder="Type the verse here..." value={formData.text}
+            onChange={handleChange} rows={5} />
         </div>
 
         <div className={styles.field}>
           <label className={styles.label} htmlFor="translation">Translation</label>
-          <input
-            id="translation"
-            name="translation"
-            type="text"
-            className={styles.input}
-            placeholder="e.g. ESV, NIV, KJV"
-            value={formData.translation}
-            onChange={handleChange}
-          />
+          <input id="translation" name="translation" type="text" className={styles.input}
+            placeholder="e.g. ESV, NIV, KJV" value={formData.translation} onChange={handleChange} />
         </div>
 
         {error && <p className={styles.error}>{error}</p>}
 
-        <button type="submit" className={styles.button}>Save Verse</button>
-
+        <button type="submit" className={styles.button} disabled={loading}>
+          {loading ? 'Saving...' : 'Save Verse'}
+        </button>
       </form>
     </div>
   )

@@ -1,5 +1,5 @@
 // src/pages/Practice.jsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { getVerses, updateVerse } from '../data/verses'
 import styles from './Practice.module.css'
@@ -8,10 +8,23 @@ function Practice() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const verse = getVerses().find((v) => v.id === Number(id))
+  const [verse, setVerse]     = useState(null)
+  const [loading, setLoading] = useState(true)
   const [revealed, setRevealed] = useState(false)
 
-  // Replace each word with underscores matching its length
+  useEffect(() => {
+    async function fetchVerse() {
+      try {
+        const data = await getVerses()
+        const found = data.find((v) => v.id === id)
+        setVerse(found || null)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchVerse()
+  }, [id])
+
   function renderHiddenText(text) {
     return text.split(' ').map((word, index) => (
       <span key={index} className={styles.blank}>
@@ -20,28 +33,21 @@ function Practice() {
     ))
   }
 
-  function handleGotIt() {
-    updateVerse(Number(id), { status: 'mastered' })
+  async function handleGotIt() {
+    await updateVerse(id, { status: 'mastered' })
     navigate('/verses')
   }
 
-  function handleStillLearning() {
-    updateVerse(Number(id), { status: 'learning' })
+  async function handleStillLearning() {
+    await updateVerse(id, { status: 'learning' })
     navigate('/verses')
   }
 
-  // Guard clause — handles bad URLs gracefully
-  if (!verse) {
-    return (
-      <div className={styles.page}>
-        <p className={styles.notFound}>Verse not found.</p>
-      </div>
-    )
-  }
+  if (loading) return <div className={styles.page}><p>Loading...</p></div>
+  if (!verse)  return <div className={styles.page}><p className={styles.notFound}>Verse not found.</p></div>
 
   return (
     <div className={styles.page}>
-
       <div className={styles.header}>
         <p className={styles.eyebrow}>Practice</p>
         <h1 className={styles.reference}>{verse.reference}</h1>
@@ -70,7 +76,6 @@ function Practice() {
           </button>
         </div>
       )}
-
     </div>
   )
 }
