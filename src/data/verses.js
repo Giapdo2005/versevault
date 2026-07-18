@@ -1,65 +1,68 @@
 // src/data/verses.js
-//
-// This is the only file that changed when we swapped localStorage
-// for Supabase. Every page still calls the same functions —
-// getVerses, saveVerse, deleteVerse, updateVerse — they just now
-// hit a real database instead of the browser.
-//
-// Notice all functions are now `async` — database calls take time
-// (network request), so we have to wait for them. localStorage was
-// instant because it was just reading from memory.
+import { supabase } from "../lib/supabase";
 
-import { supabase } from '../lib/supabase'
-
-// --- getVerses ---
-// Fetches all verses belonging to the logged in user.
-// Supabase's Row Level Security automatically filters by user_id —
-// we don't have to pass the user id manually, Supabase reads it
-// from the active session.
 export async function getVerses() {
   const { data, error } = await supabase
-    .from('verses')
-    .select('*')
-    .order('created_at', { ascending: false })
+    .from("verses")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
-// --- saveVerse ---
-// Inserts a new verse row into the verses table.
-// Again, user_id is handled by Supabase via the active session
-// and our Row Level Security policy.
 export async function saveVerse(verse) {
+  // Get the current logged in user
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data, error } = await supabase
-    .from('verses')
-    .insert([{ ...verse, status: 'needToLearn' }])
+    .from("verses")
+    .insert([
+      {
+        ...verse,
+        status: "needToLearn",
+        user_id: user.id,
+      },
+    ])
     .select()
-    .single() // returns the inserted row as an object, not an array
+    .single();
 
-  if (error) throw error
-  return data
+  if (error) throw error;
+  return data;
 }
 
-// --- deleteVerse ---
-// Deletes a verse by id.
-// RLS ensures you can only delete your own verses.
 export async function deleteVerse(id) {
-  const { error } = await supabase
-    .from('verses')
-    .delete()
-    .eq('id', id) // .eq means "where id equals"
+  const { error } = await supabase.from("verses").delete().eq("id", id);
 
-  if (error) throw error
+  if (error) throw error;
 }
 
-// --- updateVerse ---
-// Updates specific fields on a verse by id.
 export async function updateVerse(id, fields) {
-  const { error } = await supabase
-    .from('verses')
-    .update(fields)
-    .eq('id', id)
+  const { error } = await supabase.from("verses").update(fields).eq("id", id);
 
-  if (error) throw error
+  if (error) throw error;
+}
+
+// --- logReview ---
+// Saves a record of this practice session to the reviews table.
+// This gives us history — not just current state.
+// Called alongside updateVerse every time the user rates a verse.
+export async function logReview(verseId, rating, intervalDays, easeFactor) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const { error } = await supabase.from("reviews").insert([
+    {
+      verse_id: verseId,
+      user_id: user.id,
+      rating,
+      interval_days: intervalDays,
+      ease_factor: easeFactor,
+    },
+  ]);
+
+  if (error) throw error;
 }

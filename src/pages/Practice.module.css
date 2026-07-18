@@ -72,39 +72,61 @@
   color: var(--color-navy);
 }
 
-.ratingRow { display: flex; gap: var(--space-4); }
+/* --- Rating section --- */
+.ratingSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+}
 
-.stillLearningButton {
-  padding: var(--space-3) var(--space-6);
-  background-color: transparent;
+.ratingLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
   color: var(--color-muted);
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 500;
-  border: 1.5px solid #D1D9E4;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.stillLearningButton:hover {
-  border-color: var(--color-muted);
-  color: var(--color-navy);
+.ratingRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-3);
+  width: 100%;
 }
 
-.gotItButton {
-  padding: var(--space-3) var(--space-6);
-  background-color: #2D7D46;
-  color: white;
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 500;
+/* Base rating button */
+.ratingButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-2);
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, transform 0.1s ease;
 }
 
-.gotItButton:hover { opacity: 0.88; }
+.ratingButton:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.ratingButton:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ratingName {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.ratingDesc {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+/* Individual rating colors */
+.ratingAgain { background-color: #FEE2E2; color: #B91C1C; }
+.ratingHard  { background-color: #FEF3C7; color: #B45309; }
+.ratingGood  { background-color: #DBEAFE; color: #1D4ED8; }
+.ratingEasy  { background-color: #DCFCE7; color: #15803D; }
 
 .notFound { color: var(--color-muted); }

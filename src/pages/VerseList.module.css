@@ -55,3 +55,39 @@
 }
 
 .emptyLink:hover { text-decoration: underline; }
+
+/* --- Due today banner --- */
+.dueBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-4) var(--space-6);
+  background-color: #EFF6FF;
+  border: 1.5px solid #BFDBFE;
+  border-radius: var(--radius-md);
+}
+
+.dueText {
+  font-size: 0.95rem;
+  color: #1D4ED8;
+}
+
+.dueToggle {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #1D4ED8;
+  background: none;
+  border: 1.5px solid #1D4ED8;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-3);
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.dueToggle:hover {
+  background-color: #1D4ED8;
+  color: white;
+}
+
+.state { color: var(--color-muted); }
