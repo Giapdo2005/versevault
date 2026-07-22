@@ -20,14 +20,19 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-21):** Didn't know why `signIn`/`signUp` return `{ error }` instead of throwing when first asked ("not sure"). After walkthrough of `Login.jsx`'s `if (error) {...}` check, this is taught/introduced — worth a real check next session (predict the failure mode, not just recall the explanation).
 
 ### rls-data-isolation
-**Status:** introduced
+**Status:** understood
 **Depends on:** supabase-error-pattern
-**Evidence (2026-07-21):** Understood the "orphan verse" consequence of missing `user_id` unprompted. Did not independently identify the cross-user data leak angle (that `getVerses()` has no `user_id` filter and relies entirely on RLS) — this was taught. Self-reports RLS is enabled in Supabase dashboard; unverified as code (no migrations in repo).
+**Evidence (2026-07-21, upgraded 2026-07-22):** 07-21: understood the "orphan verse" consequence of missing `user_id` unprompted, but missed the cross-user leak angle (taught). 07-22, different day, now backed by actual code: after `supabase db dump` surfaced the real policy (`auth.uid() = user_id` on both tables), correctly and independently explained that this is *why* `getVerses()`'s missing `user_id` filter in the JS isn't a bug — the database enforces it regardless of the query. Self-report replaced with verified fact.
 
 ### schema-not-versioned
-**Status:** seed
+**Status:** practicing
 **Depends on:** —
-**Evidence (2026-07-21):** Missing-practice finding, not yet a lesson: no SQL/migration files anywhere in the repo — schema and RLS policies exist only in the Supabase dashboard. Relevant given the stated goal of backend/system-design depth.
+**Evidence (2026-07-21, progressed 2026-07-22):** 07-21: missing-practice finding, no SQL/migration files anywhere. 07-22: `supabase/schema.sql` now captures real table definitions + RLS policies in git via `supabase db dump`. Not fully resolved — this is a snapshot, not a CLI-tracked migration (`supabase db pull` failed with an unexplained "No schema changes found", unresolved — see [[db-pull-mystery]]), so ongoing schema changes still won't auto-diff. Real progress, not yet the end state.
+
+### db-pull-mystery
+**Status:** seed
+**Depends on:** schema-not-versioned
+**Evidence (2026-07-22):** `supabase db pull` reported "No schema changes found" against a database that demonstrably has `verses`/`reviews` tables in `public`. Three hypotheses tested and ruled out together (Docker container crash — `docker ps -a` showed nothing running; stale migration history — `supabase migration list` showed empty local *and* remote; wrong schema — dashboard confirmed `public`). Root cause never found; worked around with `db dump` instead. Open loose end for a future session — do not assume a cause if this resurfaces.
 
 ### sm2-algorithm
 **Status:** introduced

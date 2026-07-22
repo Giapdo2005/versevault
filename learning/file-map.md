@@ -54,3 +54,10 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 - **`learning/project.md`, `file-map.md`, `knowledge-graph.md`, `plan.md`** — this session's own artifacts: triage, file map, knowledge graph, forward plan. `known` — authored this session, now committed (`e336851`).
 - **`.claude/skills/`, `.agents/skills/`** — the `adopt-project`/`next-lesson`/`plan-journey` skill definitions that drive this learning workflow, mirrored for two different tools. `known` — toured 2026-07-22, now committed.
 - **`skills-lock.json`** — lockfile recording where those skills came from (`jasonku09/altitude-skills` on GitHub) and a hash, so future changes to the source are detectable. `known` — toured 2026-07-22, now committed.
+
+## Database (schema as code)
+
+- **`supabase/config.toml`** — Supabase CLI settings for *local* development (ports, which API schemas to expose). Not your actual schema — just how the CLI runs things on your machine. `known` → toured 2026-07-22.
+- **`supabase/.gitignore`** — nested gitignore excluding CLI-generated temp/cache files (`.temp`, local env overrides). `known`.
+- **`supabase/schema.sql`** — a snapshot of the real `verses`/`reviews` table definitions and RLS policies, captured via `supabase db dump` (not a tracked migration — see [[db-pull-mystery]] for why `db pull` was the intended-but-unresolved path). `known` → [[rls-data-isolation]], [[schema-not-versioned]].
+- **`supabase/.temp/`** — CLI link-session cache (project ref, connection info). `generated`, gitignored, machine-made.
