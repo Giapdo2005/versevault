@@ -46,5 +46,11 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 - **`vite.config.js`** — Vite + React plugin config. `parked`, boring boilerplate.
 - **`package.json`, `package-lock.json`** — dependency manifest/lockfile. `generated` — never hand-edit `package-lock.json`.
 - **`node_modules/`** — installed dependencies. `generated` — machine-made, never edit, always rebuildable via `npm install`.
-- **`.env`** — holds `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Not committed (check `.gitignore`). `known` → [[env-var-security]].
-- **`.gitignore`** — untouched, `parked`.
+- **`.env`** — holds `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Not committed (in `.gitignore`, only `node_modules`/`.env` remain there now). `known` → [[env-var-security]].
+- **`.gitignore`** — controls what git *tracks locally*; briefly (and correctly, on reflection) held `.agents`/`.claude`/`learning`/`skills-lock.json` before being reverted. `known` → [[gitignore-scope]].
+
+## Learning-method tooling
+
+- **`learning/project.md`, `file-map.md`, `knowledge-graph.md`, `plan.md`** — this session's own artifacts: triage, file map, knowledge graph, forward plan. `known` — authored this session, now committed (`e336851`).
+- **`.claude/skills/`, `.agents/skills/`** — the `adopt-project`/`next-lesson`/`plan-journey` skill definitions that drive this learning workflow, mirrored for two different tools. `known` — toured 2026-07-22, now committed.
+- **`skills-lock.json`** — lockfile recording where those skills came from (`jasonku09/altitude-skills` on GitHub) and a hash, so future changes to the source are detectable. `known` — toured 2026-07-22, now committed.

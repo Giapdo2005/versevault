@@ -58,3 +58,13 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** seed
 **Depends on:** —
 **Evidence (2026-07-21):** No `*.test.*`/`*.spec.*` files anywhere in the repo. Absence noted as curriculum, not a failure — worth a section once the core MVP work is underway.
+
+### git-workflow
+**Status:** understood
+**Depends on:** —
+**Evidence (2026-07-21 and prior):** Pre-existing evidence: 6 real, incremental commits in the repo before this session. New evidence today: independently ran `git status`, read a `git diff` on `.gitignore` themselves, diagnosed that an earlier commit had gitignored `learning/`/`.claude/`/`.agents/`, fixed it, staged, and committed (`e336851`) — entirely unprompted, no commands dictated. Two independent days of evidence.
+
+### gitignore-scope
+**Status:** introduced
+**Depends on:** git-workflow
+**Evidence (2026-07-22):** Initially conflated "keep this off GitHub" with "gitignore it," which would have meant zero version history/backup for `learning/`. After the tradeoff was named (gitignore = no local backup either, vs. a private repo = backup + hidden from others), chose to commit everything instead. First contact with this specific distinction — worth a quick check next session rather than assuming it's locked in.

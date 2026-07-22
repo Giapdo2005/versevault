@@ -14,10 +14,12 @@ Git already has real, incremental history (6 commits) and the app runs cleanly �
 **Deliverable:** everything from this session is committed — nothing from today can be lost.
 
 **Tasks:**
-- [ ] Tour the untracked files (`.claude/`, `.agents/`, `skills-lock.json`, `learning/`) and confirm none of them are secrets/environment-specific — decide together they belong in git.
-- [ ] Stage the right files with `git add` (learner runs it).
-- [ ] Write and run a commit, message in the learner's own words.
-- [ ] Verify with `git log`/`git status` that the working tree is clean.
+- [x] Tour the untracked files (`.claude/`, `.agents/`, `skills-lock.json`, `learning/`) and confirm none of them are secrets/environment-specific — decide together they belong in git.
+- [x] Stage the right files with `git add` (learner runs it).
+- [x] Write and run a commit, message in the learner's own words.
+- [x] Verify with `git log`/`git status` that the working tree is clean.
+
+**Done 2026-07-22** — commit `e336851`, working tree clean. Bonus: caught and fixed a self-made `.gitignore` mistake along the way (see [[gitignore-scope]] in the knowledge graph) — unplanned, but real evidence.
 
 ## Section 2 — Version your schema as code
 
