@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "skills": {
+    "adopt-project": {
+      "source": "jasonku09/altitude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/adopt-project/SKILL.md",
+      "computedHash": "ff4bdf7b6f4edee72261dbec4fdd708d59a45e424f922e09cf8caa49ad972c82"
+    },
+    "next-lesson": {
+      "source": "jasonku09/altitude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/next-lesson/SKILL.md",
+      "computedHash": "697fa5f5ecc39e97503afd980f76d328a9536abb3c2d71ac336353c193af9ca1"
+    },
+    "plan-journey": {
+      "source": "jasonku09/altitude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/plan-journey/SKILL.md",
+      "computedHash": "11b09351ade3afadc853dcee422005e775ebeb5e3d3910ce601181bf568e7eff"
+    }
+  }
+}
