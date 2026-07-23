@@ -40,9 +40,9 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-22):** `supabase db pull` reported "No schema changes found" against a database that demonstrably has `verses`/`reviews` tables in `public`. Three hypotheses tested and ruled out together (Docker container crash — `docker ps -a` showed nothing running; stale migration history — `supabase migration list` showed empty local *and* remote; wrong schema — dashboard confirmed `public`). Root cause never found; worked around with `db dump` instead. Open loose end for a future session — do not assume a cause if this resurfaces.
 
 ### sm2-algorithm
-**Status:** introduced
+**Status:** understood
 **Depends on:** —
-**Evidence (2026-07-21):** Correctly identified direction (harder rating → shorter/reset interval) but described it as a gradual "decrement" rather than the actual full reset (`interval`/`repetitions` → 0) on "Again"/"Hard". Corrected in conversation.
+**Evidence (2026-07-21, upgraded 2026-07-23):** 07-21: correctly identified direction (harder rating → shorter/reset interval) but described it as a gradual "decrement" rather than the actual full reset. 07-23, different day: wrote a unit test asserting the reset (`interval: 1, repetitions: 0` on "Again"), self-corrected an initial wrong value (`interval: 0`) before it was even flagged, and the corrected assertion matches the real code. Genuine retrieval + self-correction, not just recall.
 
 ### self-report-practice
 **Status:** seed
@@ -64,10 +64,10 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Depends on:** —
 **Evidence:** Underlying mechanism of `AuthContext` (prop-drilling problem it solves); not directly probed. The file's own comments explain it — worth checking understanding directly rather than assuming from that.
 
-### missing-practice: automated testing
-**Status:** seed
+### automated-testing-basics
+**Status:** practicing
 **Depends on:** —
-**Evidence (2026-07-21):** No `*.test.*`/`*.spec.*` files anywhere in the repo. Absence noted as curriculum, not a failure — worth a section once the core MVP work is underway.
+**Evidence (2026-07-21 gap noted, 2026-07-23 resolved):** 07-21: no test files anywhere, noted as a missing practice. 07-23: installed Vitest (correctly reasoned it'd land in `devDependencies`, not `dependencies`), wrote a first test independently after one explained example, correctly predicted auto-discovery by filename pattern was wrong (guessed it'd need an explicit path) — corrected and understood. First real hands-on testing experience — one strong session, not yet re-proven after a gap.
 
 ### git-workflow
 **Status:** understood

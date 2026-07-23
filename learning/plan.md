@@ -63,11 +63,13 @@ No automated tests exist anywhere in the repo. Rather than bolting testing on la
 **Deliverable:** a test suite that catches regressions in the riskiest piece of logic in the app.
 
 **Tasks:**
-- [ ] Decide and install a test framework (Vitest — pairs natively with Vite).
-- [ ] Write a first passing test: a "Good" rating grows the interval.
-- [ ] Write the reclaim-task test: "Again"/"Hard" fully resets `interval`/`repetitions`, not a gradual decrement.
-- [ ] Run the suite, read the output together.
-- [ ] Commit the test file and updated `package.json`.
+- [x] Decide and install a test framework (Vitest — pairs natively with Vite).
+- [x] Write a first passing test: a "Good" rating grows the interval.
+- [x] Write the reclaim-task test: "Again"/"Hard" fully resets `interval`/`repetitions`, not a gradual decrement.
+- [x] Run the suite, read the output together.
+- [x] Commit the test file and updated `package.json`.
+
+**Done 2026-07-23** — commit `deb71ec`. Both tests pass; self-corrected the reclaim-task assertion before it was even flagged. Deliverable reached: a real regression test for the algorithm's trickiest behavior. Section 5 (the Navbar name bug) is next.
 
 ## Section 5 — Fix the Navbar name bug
 

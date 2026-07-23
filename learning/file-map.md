@@ -18,11 +18,12 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 
 - **`src/lib/supabase.js`** — Creates the single shared Supabase client from `VITE_SUPABASE_URL`/`VITE_SUPABASE_ANON_KEY`. Singleton so every file shares one auth session. `known` → [[env-var-security]].
 - **`src/data/verses.js`** — All Supabase reads/writes for verses live here: `getVerses` (no explicit `user_id` filter — isolation depends entirely on RLS), `saveVerse` (fetches current user, attaches `user_id`), `deleteVerse`, `updateVerse`, `logReview` (writes practice history to a separate `reviews` table). `introduced` → [[rls-data-isolation]], [[schema-not-versioned]].
-- **Supabase tables `verses` / `reviews`** — live only in the Supabase dashboard; no migration files in this repo. Self-reported RLS is enabled but unverified as code. `parked` → [[schema-not-versioned]].
+- **Supabase tables `verses` / `reviews`** — RLS confirmed as code (`supabase/schema.sql`) and empirically tested (disabled/re-enabled with two real test accounts, 2026-07-23). `known` → [[rls-data-isolation]].
 
 ## Spaced repetition
 
-- **`src/lib/spacedRepetition.js`** — Pure logic, no React/Supabase: `calculateNextReview` (SM-2 algorithm — grows or resets `interval`/`ease_factor`/`repetitions` based on a 1-4 rating), `isDueForReview`, `getDueVerses`. `introduced` → [[sm2-algorithm]].
+- **`src/lib/spacedRepetition.js`** — Pure logic, no React/Supabase: `calculateNextReview` (SM-2 algorithm — grows or resets `interval`/`ease_factor`/`repetitions` based on a 1-4 rating), `isDueForReview`, `getDueVerses`. `known` → [[sm2-algorithm]].
+- **`src/lib/spacedRepetition.test.js`** — Unit tests for `calculateNextReview`: a "Good" rating growing the interval, and an "Again" rating fully resetting it (the reclaim task — pins down the exact misconception from Phase 2). `known` — authored 2026-07-23 → [[sm2-algorithm]], [[automated-testing-basics]].
 
 ## Pages
 
