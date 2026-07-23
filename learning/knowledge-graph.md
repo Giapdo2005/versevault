@@ -67,7 +67,7 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 ### automated-testing-basics
 **Status:** practicing
 **Depends on:** —
-**Evidence (2026-07-21 gap noted, 2026-07-23 resolved):** 07-21: no test files anywhere, noted as a missing practice. 07-23: installed Vitest (correctly reasoned it'd land in `devDependencies`, not `dependencies`), wrote a first test independently after one explained example, correctly predicted auto-discovery by filename pattern was wrong (guessed it'd need an explicit path) — corrected and understood. First real hands-on testing experience — one strong session, not yet re-proven after a gap.
+**Evidence (2026-07-23):** Installed Vitest, wrote a first test after one explained example, self-corrected the reclaim-task assertion. Then, unprompted, wrote a *third* test entirely independently — asked "how do I get better at this," was pointed at "test every branch, test the boundaries," and immediately picked the exact untested `repetitions === 1` branch, wrote a correct test with no fill-ins, ran it, passed first try. Strong same-day evidence — capped at `practicing` per the no-same-day-`understood` rule; a great candidate to confirm as `understood` on a later-day review.
 
 ### git-workflow
 **Status:** understood

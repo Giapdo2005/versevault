@@ -23,7 +23,7 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 ## Spaced repetition
 
 - **`src/lib/spacedRepetition.js`** — Pure logic, no React/Supabase: `calculateNextReview` (SM-2 algorithm — grows or resets `interval`/`ease_factor`/`repetitions` based on a 1-4 rating), `isDueForReview`, `getDueVerses`. `known` → [[sm2-algorithm]].
-- **`src/lib/spacedRepetition.test.js`** — Unit tests for `calculateNextReview`: a "Good" rating growing the interval, and an "Again" rating fully resetting it (the reclaim task — pins down the exact misconception from Phase 2). `known` — authored 2026-07-23 → [[sm2-algorithm]], [[automated-testing-basics]].
+- **`src/lib/spacedRepetition.test.js`** — Unit tests for `calculateNextReview`: a "Good" rating growing the interval, an "Again" rating fully resetting it (the reclaim task), and the `repetitions === 1` branch (written independently, unprompted). `known` — authored 2026-07-23 → [[sm2-algorithm]], [[automated-testing-basics]].
 
 ## Pages
 

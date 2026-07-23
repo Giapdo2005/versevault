@@ -21,4 +21,13 @@ describe("calculateNextReview", () => {
     // TODO(you): what should repetitions be after a full reset?
     expect(result.repetitions).toBe(0);
   });
+
+  it("repetition is 1 case, how does it work?", () => {
+    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 1 };
+
+    const result = calculateNextReview(learningVerse, 3);
+
+    expect(result.interval).toBe(3);
+    expect(result.repetitions).toBe(2);
+  });
 });
