@@ -43,13 +43,31 @@ Create a second test account and confirm, hands-on, that one user's verses never
 
 **Deliverable:** proof, not assumption, that user data is isolated — the load-bearing guarantee for every feature after this.
 
+**Tasks:**
+- [x] Predict what you'd see in the app if the RLS policy were broken or missing, before testing anything.
+- [x] Create a second test account and add a verse under each of the two accounts.
+- [x] Confirm hands-on that each account only ever sees its own verse.
+- [x] Break the policy on purpose (temporarily) and confirm your prediction from step 1 actually happens.
+- [x] Restore the policy, re-verify isolation holds, commit anything that changed.
+
+**Done 2026-07-23** — correctly predicted the leak, disabled RLS on `verses` and watched it happen for real (both test accounts saw all verses), re-enabled it, confirmed isolation restored. No repo changes this section (all done via dashboard SQL), so nothing to commit. Section 4 is next.
+
 ## Section 4 — A safety net for the trickiest logic
 
-No automated tests exist anywhere in the repo. Rather than bolting testing on later as homework, introduce it here, where it's actually load-bearing: a couple of tests for `calculateNextReview` (the SM-2 logic) and the isolation behavior from Section 3.
+No automated tests exist anywhere in the repo. Rather than bolting testing on later as homework, introduce it here, where it's actually load-bearing: tests for `calculateNextReview` (the SM-2 logic) — pure JS, no dependencies, an ideal first unit-test target.
+
+**Scope note (2026-07-23):** originally this section also covered testing the RLS isolation behavior from Section 3, but that needs real test-user infrastructure against Supabase — descoped to keep this section achievable. Candidate for its own future section if wanted.
 
 **Reclaim task:** you described the "Again" rating as a gradual decrement during Phase 2, when it's actually a full reset (`interval`/`repetitions` → 0). Write a test that pins down the real behavior, so this can't quietly drift or be misunderstood again.
 
-**Deliverable:** a test suite that catches regressions in the two riskiest pieces of logic in the app.
+**Deliverable:** a test suite that catches regressions in the riskiest piece of logic in the app.
+
+**Tasks:**
+- [ ] Decide and install a test framework (Vitest — pairs natively with Vite).
+- [ ] Write a first passing test: a "Good" rating grows the interval.
+- [ ] Write the reclaim-task test: "Again"/"Hard" fully resets `interval`/`repetitions`, not a gradual decrement.
+- [ ] Run the suite, read the output together.
+- [ ] Commit the test file and updated `package.json`.
 
 ## Section 5 — Fix the Navbar name bug
 

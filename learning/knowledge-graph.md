@@ -22,7 +22,12 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 ### rls-data-isolation
 **Status:** understood
 **Depends on:** supabase-error-pattern
-**Evidence (2026-07-21, upgraded 2026-07-22):** 07-21: understood the "orphan verse" consequence of missing `user_id` unprompted, but missed the cross-user leak angle (taught). 07-22, different day, now backed by actual code: after `supabase db dump` surfaced the real policy (`auth.uid() = user_id` on both tables), correctly and independently explained that this is *why* `getVerses()`'s missing `user_id` filter in the JS isn't a bug — the database enforces it regardless of the query. Self-report replaced with verified fact.
+**Evidence (2026-07-21, upgraded 2026-07-22, reinforced 2026-07-23):** 07-21: understood the "orphan verse" consequence of missing `user_id` unprompted, but missed the cross-user leak angle (taught). 07-22: after `supabase db dump` surfaced the real policy, correctly explained why `getVerses()`'s missing `user_id` filter isn't a bug. 07-23: correctly predicted, before testing, that disabling RLS would leak all verses across accounts — then confirmed hands-on with two real test accounts (isolation holds with RLS on, leaks with it off) and restored it. Third day of evidence, now includes a live empirical test, not just code-reading.
+
+### rls-fail-open-vs-closed
+**Status:** seed
+**Depends on:** rls-data-isolation
+**Evidence (2026-07-23):** Explained (not yet independently reasoned) during Section 3: dropping a policy entirely makes Postgres deny *everyone* (fail-closed, default-deny when RLS is enabled with zero policies), which is different from disabling RLS outright (fail-open, the scenario actually tested). Worth a direct check next time rather than assuming it stuck from being told once.
 
 ### schema-not-versioned
 **Status:** practicing
