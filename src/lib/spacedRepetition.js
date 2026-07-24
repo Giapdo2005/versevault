@@ -34,16 +34,26 @@ export function calculateNextReview(verse, rating) {
     // The user needs to see this verse again very soon.
     interval = 1;
     repetitions = 0;
-  } else {
+  } else if (rating >= 3 && rating < 5) {
     // Good or Easy — grow the interval.
-    if (repetitions === 0) {
+    if (repetitions < 3) {
       interval = 1; // first successful review: 1 day
-    } else if (repetitions === 1) {
+    } else if (repetitions === 3) {
       interval = 3; // second successful review: 3 days
     } else {
       // After that, multiply by ease factor each time.
       // ease_factor starts at 2.5, so intervals roughly
       // double each successful review: 3 → 7 → 18 → 45...
+      interval = Math.round(interval * ease_factor);
+    }
+    repetitions += 1;
+  } else {
+    // new case of perfect recall
+    if (repetitions < 2) {
+      interval = 1;
+    } else if (repetitions === 2) {
+      interval = 3;
+    } else {
       interval = Math.round(interval * ease_factor);
     }
     repetitions += 1;
@@ -61,10 +71,10 @@ export function calculateNextReview(verse, rating) {
     rating === 1
       ? "needToLearn"
       : rating === 2
-      ? "learning"
-      : rating === 3
-      ? "learning"
-      : "mastered";
+        ? "learning"
+        : rating === 3
+          ? "learning"
+          : "mastered";
 
   return {
     interval,

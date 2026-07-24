@@ -43,6 +43,12 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** understood
 **Depends on:** —
 **Evidence (2026-07-21, upgraded 2026-07-23):** 07-21: correctly identified direction (harder rating → shorter/reset interval) but described it as a gradual "decrement" rather than the actual full reset. 07-23, different day: wrote a unit test asserting the reset (`interval: 1, repetitions: 0` on "Again"), self-corrected an initial wrong value (`interval: 0`) before it was even flagged, and the corrected assertion matches the real code. Genuine retrieval + self-correction, not just recall.
+**Note (2026-07-24):** now mid-modification for a 5th "Perfect" rating and a deliberate threshold change to Good/Easy's progression — see [[test-should-assert-intent]]. `sm2-algorithm`'s `understood` status was earned on the *pre-change* behavior; the modified version isn't yet re-verified.
+
+### test-should-assert-intent
+**Status:** introduced
+**Depends on:** automated-testing-basics
+**Evidence (2026-07-24):** While extending `calculateNextReview` for a 5th rating, also changed existing Good/Easy thresholds — a deliberate, confirmed design choice. But the existing test's expected value was edited to match the new code's output rather than being written to assert the new *intended* behavior — the reverse of how a regression test should work (a test that always agrees with the code can't catch anything). Named and acknowledged ("yes, this makes sense") but not yet corrected — bookmarked for next session, so credit is for recognizing it, not yet for applying it.
 
 ### self-report-practice
 **Status:** seed
@@ -55,9 +61,14 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-21):** Correctly reasoned that `VITE_` prefix relates to the Vite build tool and that the anon key doesn't need database-password-level secrecy. Confirmed and connected to RLS in conversation.
 
 ### navbar-name-bug
-**Status:** introduced
+**Status:** understood
 **Depends on:** supabase-error-pattern
-**Evidence (2026-07-21):** Found during file-mapping, not yet handed to the learner as a debugging exercise: `Navbar.jsx` reads `user.user_metadata.firstName/lastName`, but `signUp` never collects or sends a name — display will always be blank. Good candidate reclaim task (ties directly to the stated Supabase/auth fear).
+**Evidence (2026-07-21 found, resolved 2026-07-24):** 07-21: found during file-mapping. 07-24: traced it via real git archaeology (`git log -p`) rather than guessing — found the exact commit (`534e775`, misleadingly titled "added space repetition algorithm") that silently deleted the name fields and the `options: { data: metadata }` pattern. Correctly explained the data flow (metadata → `user_metadata` → already-loaded `user` object, not a separate table pull, self-corrected that detail). Restored the fix with two guided fill-in attempts: first attempt passed `firstName`/`lastName` as separate positional arguments — correctly predicted, when asked to trace it, that the extra argument would be silently dropped — then fixed it to a single object. Verified working end-to-end with a real signup.
+
+### positional-vs-object-arguments
+**Status:** practicing
+**Depends on:** navbar-name-bug
+**Evidence (2026-07-24):** After passing `signUp(email, password, formData.firstName, formData.lastName)` — four positional args against a three-parameter function — correctly predicted that `metadata` would just equal `formData.firstName` and the fourth argument would be silently dropped, no error. Real, useful JS gotcha, caught through reasoning rather than being told.
 
 ### react-context
 **Status:** seed

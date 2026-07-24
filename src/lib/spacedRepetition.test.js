@@ -27,7 +27,15 @@ describe("calculateNextReview", () => {
 
     const result = calculateNextReview(learningVerse, 3);
 
-    expect(result.interval).toBe(3);
+    expect(result.interval).toBe(1);
     expect(result.repetitions).toBe(2);
+  });
+  it("repetition is 3 case with perfect recall", () => {
+    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 2 };
+
+    const result = calculateNextReview(learningVerse, 5);
+
+    expect(result.interval).toBe(3);
+    expect(result.repetitions).toBe(3);
   });
 });

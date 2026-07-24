@@ -10,9 +10,9 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 
 ## Auth
 
-- **`src/context/AuthContext.jsx`** — Owns auth state (`user`, `loading`) via React Context so any component can read it without prop-drilling. On mount, checks `supabase.auth.getSession()` (restores session from localStorage on refresh) and subscribes to `onAuthStateChange`. Exposes `signUp`/`signIn`/`signOut`, all returning `{ error }` instead of throwing. `introduced` → [[auth-session-flow]], [[supabase-error-pattern]].
+- **`src/context/AuthContext.jsx`** — Owns auth state (`user`, `loading`) via React Context so any component can read it without prop-drilling. On mount, checks `supabase.auth.getSession()` (restores session from localStorage on refresh) and subscribes to `onAuthStateChange`. Exposes `signUp`/`signIn`/`signOut`. `signUp` takes a `metadata` object passed to Supabase's `options: { data: metadata }`, restored 2026-07-24 after being found deleted. `introduced` → [[auth-session-flow]], [[supabase-error-pattern]].
 - **`src/components/ProtectedRoute.jsx`** — Gate component: renders children if `user` exists, else `<Navigate to="/login" />`. `known` → [[protected-routing]].
-- **`src/pages/Login.jsx`** — Single page for both login and signup (toggled by `mode` state). Calls `signIn`/`signUp` from `useAuth()`, checks the returned `error` and displays `error.message`, or navigates to `/verses` on success. **Known gap:** signup only sends `email`/`password` — no name is ever collected, which is why [[navbar-name-bug]] exists. `known` → [[supabase-error-pattern]].
+- **`src/pages/Login.jsx`** — Single page for both login and signup (toggled by `mode` state). Signup now collects `firstName`/`lastName` and passes them as `signUp`'s metadata object — restored 2026-07-24 (see [[navbar-name-bug]]). `known` → [[supabase-error-pattern]], [[navbar-name-bug]].
 
 ## Verse data (backend boundary)
 

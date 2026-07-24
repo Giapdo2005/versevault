@@ -78,21 +78,40 @@ A real bug found while mapping the code: `Navbar.jsx` reads `user.user_metadata.
 **Reclaim task:** trace this yourself first (where would the name need to be captured? how does Supabase's `signUp` options carry custom metadata?) before fixing it.
 
 **Tasks:**
-- [ ] Trace and predict: where does a name need to be captured, and how might `signUp` carry it to Supabase?
-- [ ] Add first/last name fields to the signup form in `Login.jsx`.
-- [ ] Update `AuthContext`'s `signUp` to pass them through to Supabase.
-- [ ] Test end-to-end with a new account, confirm the Navbar shows the name.
-- [ ] Commit.
+- [x] Trace and predict: where does a name need to be captured, and how might `signUp` carry it to Supabase?
+- [x] Add first/last name fields to the signup form in `Login.jsx`.
+- [x] Update `AuthContext`'s `signUp` to pass them through to Supabase.
+- [x] Test end-to-end with a new account, confirm the Navbar shows the name.
+- [x] Commit.
 
 **Deliverable:** visible, working fix — and a second rep on debugging an auth-related Supabase issue, the exact skill you said you want to grow.
 
-## Sections 6+ — after hardening (sequenced, not yet detailed)
+**Done 2026-07-24** — commit `5cbbf0e`. This wasn't a mystery bug — real git archaeology found the exact commit (`534e775`) that silently deleted it. Caught a real JS gotcha along the way (positional args silently dropping) via a wrong-then-corrected fill-in. All five hardening sections (1-5) are now complete.
 
-These are the parking-lot items from Phase 1, offered as candidates once the foundation is solid — not committed to yet:
+## Section 6 — Typed-recall practice
 
-- **Friends/social feature** — the original vision, deliberately sequenced *after* hardening since it's the feature most exposed to schema/RLS bugs, and the best system-design practice (new tables, relationships, permissions).
+Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces the reveal-and-self-rate flow in `Practice.jsx` with real typed input: the user types the verse from memory, the app compares it word-by-word against the actual text, computes a percentage match, and **auto-determines the SM-2 rating** from that percentage (decided 2026-07-24 — no manual buttons; the score decides).
+
+**Reclaim task:** tie back to the "React — fuzzy" inherited decision from Section 3 of this plan (Phase 3 originally) — explain why typing into the new input field automatically updates what's on screen, in terms of "UI as a function of state," not just the re-render-performance angle you gave then.
+
+**Deliverable:** a working typed-practice mode that scores real recall, not self-report.
+
+**Tasks:**
+- [x] Decide percentage-to-rating thresholds — 6 labels (Perfect/Good/Decent/Average/Need practice/Poor) mapping onto a **5-value** rating scale (adds a new "Perfect" = 5, extending `calculateNextReview` beyond its original 1-4).
+- [x] Trace/predict what `calculateNextReview` actually needs to change to support rating 5, before touching the code. Correctly predicted it would fall into the existing "grow interval" branch with a bigger ease-factor bump — technically already worked via fallthrough before any edit.
+- [~] Update `calculateNextReview` for the 5th rating + write tests locking in the new behavior. **In progress, bookmarked 2026-07-24:** added a real 5th (Perfect) branch. Along the way, also deliberately changed Good/Easy's existing thresholds (`repetitions === 0/1` → `< 3`/`=== 3`) — intent confirmed: Good/Easy should now take 3 successful reviews before the 3-day jump, not 1. **Open loose ends:** (1) the existing test's expected value was edited to match the new code output rather than written to assert the new intent — flagged as a real anti-pattern (a test that always agrees with the code can't catch regressions), acknowledged but not yet corrected; (2) the code's comments (top-of-file rating scale, "first/second successful review" inline comments) are now stale and don't describe the new 3-review threshold or rating 5.
+- [ ] Write `scoreAttempt` as a pure, tested function (word-by-word comparison + percentage) — test-first, same pattern.
+- [ ] Write the percentage-to-rating mapping (6 buckets → 5 values, decided 2026-07-24) as its own tested function.
+- [ ] Rebuild `Practice.jsx`'s UI: typed input instead of reveal, wire up scoring + auto-rating.
+- [ ] Test end-to-end in the browser.
+- [ ] Commit.
+
+**Resume point:** next session, first reconcile the bookmarked loose ends above (rewrite the test to assert intent, not echo output; update stale comments), then continue with `scoreAttempt`.
+
+## Sections 7+ — remaining candidates (not yet detailed)
+
+- **Friends/social feature** — the original vision, best system-design practice (new tables, relationships, permissions).
 - **Hosting/deployment** — pick and configure real hosting; currently fully undecided.
-- **Checked-recall practice** — typed input instead of self-report in Practice; lower priority given your stated frontend disinterest, but still real product value.
 
 ---
 
