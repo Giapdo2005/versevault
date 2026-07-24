@@ -58,8 +58,14 @@ export function AuthProvider({ children }) {
   // We define these here and pass them through context so any
   // component can call them without importing supabase directly.
 
-  async function signUp(email, password) {
-    const { error } = await supabase.auth.signUp({ email, password })
+  async function signUp(email, password, metadata) {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: metadata,
+      },
+    })
     return { error }
   }
 

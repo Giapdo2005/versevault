@@ -77,6 +77,13 @@ A real bug found while mapping the code: `Navbar.jsx` reads `user.user_metadata.
 
 **Reclaim task:** trace this yourself first (where would the name need to be captured? how does Supabase's `signUp` options carry custom metadata?) before fixing it.
 
+**Tasks:**
+- [ ] Trace and predict: where does a name need to be captured, and how might `signUp` carry it to Supabase?
+- [ ] Add first/last name fields to the signup form in `Login.jsx`.
+- [ ] Update `AuthContext`'s `signUp` to pass them through to Supabase.
+- [ ] Test end-to-end with a new account, confirm the Navbar shows the name.
+- [ ] Commit.
+
 **Deliverable:** visible, working fix — and a second rep on debugging an auth-related Supabase issue, the exact skill you said you want to grow.
 
 ## Sections 6+ — after hardening (sequenced, not yet detailed)
