@@ -46,9 +46,9 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Note (2026-07-24):** now mid-modification for a 5th "Perfect" rating and a deliberate threshold change to Good/Easy's progression — see [[test-should-assert-intent]]. `sm2-algorithm`'s `understood` status was earned on the *pre-change* behavior; the modified version isn't yet re-verified.
 
 ### test-should-assert-intent
-**Status:** introduced
+**Status:** practicing
 **Depends on:** automated-testing-basics
-**Evidence (2026-07-24):** While extending `calculateNextReview` for a 5th rating, also changed existing Good/Easy thresholds — a deliberate, confirmed design choice. But the existing test's expected value was edited to match the new code's output rather than being written to assert the new *intended* behavior — the reverse of how a regression test should work (a test that always agrees with the code can't catch anything). Named and acknowledged ("yes, this makes sense") but not yet corrected — bookmarked for next session, so credit is for recognizing it, not yet for applying it.
+**Evidence (2026-07-24 introduced, 2026-07-25 applied):** 07-24: flagged that a test's expected value had been edited to match new code output rather than asserting intent — acknowledged, not yet corrected. 07-25, different day: rewrote the tests with clear intent-revealing names ("repetitions is 2 with rating of 3" / "...3 with rating of 4"), each pinned to the specific `repetitions` threshold that triggers each interval — real correction, not just re-agreeing. All 5 tests pass (`npx vitest run`, verified 2026-07-25).
 
 ### self-report-practice
 **Status:** seed

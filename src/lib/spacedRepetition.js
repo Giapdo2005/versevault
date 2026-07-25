@@ -4,13 +4,14 @@
 // No React, no Supabase — just math.
 
 // Ratings:
-//   1 = Again  — complete blank, couldn't recall
-//   2 = Hard   — recalled but with significant difficulty
-//   3 = Good   — recalled with some effort
-//   4 = Easy   — perfect recall, felt effortless
+//   1 = Again    — complete blank, couldn't recall
+//   2 = Hard     — recalled but with significant difficulty
+//   3 = Good     — recalled with some effort
+//   4 = Easy     — recalled comfortably
+//   5 = Perfect  — flawless, effortless recall (typed-practice only)
 
 // --- calculateNextReview ---
-// Takes the current verse state and a rating (1-4).
+// Takes the current verse state and a rating (1-5).
 // Returns the updated fields to save back to the database.
 //
 // We return an object of fields rather than a full verse so we

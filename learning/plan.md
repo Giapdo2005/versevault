@@ -99,14 +99,12 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 **Tasks:**
 - [x] Decide percentage-to-rating thresholds — 6 labels (Perfect/Good/Decent/Average/Need practice/Poor) mapping onto a **5-value** rating scale (adds a new "Perfect" = 5, extending `calculateNextReview` beyond its original 1-4).
 - [x] Trace/predict what `calculateNextReview` actually needs to change to support rating 5, before touching the code. Correctly predicted it would fall into the existing "grow interval" branch with a bigger ease-factor bump — technically already worked via fallthrough before any edit.
-- [~] Update `calculateNextReview` for the 5th rating + write tests locking in the new behavior. **In progress, bookmarked 2026-07-24:** added a real 5th (Perfect) branch. Along the way, also deliberately changed Good/Easy's existing thresholds (`repetitions === 0/1` → `< 3`/`=== 3`) — intent confirmed: Good/Easy should now take 3 successful reviews before the 3-day jump, not 1. **Open loose ends:** (1) the existing test's expected value was edited to match the new code output rather than written to assert the new intent — flagged as a real anti-pattern (a test that always agrees with the code can't catch regressions), acknowledged but not yet corrected; (2) the code's comments (top-of-file rating scale, "first/second successful review" inline comments) are now stale and don't describe the new 3-review threshold or rating 5.
+- [x] Update `calculateNextReview` for the 5th rating + write tests locking in the new behavior. **Done 2026-07-25:** 5th (Perfect) branch in place; Good/Easy deliberately now takes 3 successful reviews before the 3-day jump (confirmed intent). Tests rewritten with intent-revealing names, no longer just echoing code output. Doc comments updated for the 1-5 scale. All 5 tests pass.
 - [ ] Write `scoreAttempt` as a pure, tested function (word-by-word comparison + percentage) — test-first, same pattern.
 - [ ] Write the percentage-to-rating mapping (6 buckets → 5 values, decided 2026-07-24) as its own tested function.
 - [ ] Rebuild `Practice.jsx`'s UI: typed input instead of reveal, wire up scoring + auto-rating.
 - [ ] Test end-to-end in the browser.
 - [ ] Commit.
-
-**Resume point:** next session, first reconcile the bookmarked loose ends above (rewrite the test to assert intent, not echo output; update stale comments), then continue with `scoreAttempt`.
 
 ## Sections 7+ — remaining candidates (not yet detailed)
 
