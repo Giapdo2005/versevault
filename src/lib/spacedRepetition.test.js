@@ -22,20 +22,34 @@ describe("calculateNextReview", () => {
     expect(result.repetitions).toBe(0);
   });
 
-  it("repetition is 1 case, how does it work?", () => {
-    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 1 };
+  it("repetitions is 2 with rating of 3", () => {
+    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 2 };
 
     const result = calculateNextReview(learningVerse, 3);
 
     expect(result.interval).toBe(1);
-    expect(result.repetitions).toBe(2);
+    expect(result.repetitions).toBe(3);
   });
-  it("repetition is 3 case with perfect recall", () => {
-    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 2 };
+  it("repetitions is 3 with rating of 4", () => {
+    const learningVerse = { interval: 1, ease_factor: 2.6, repetitions: 3 };
 
-    const result = calculateNextReview(learningVerse, 5);
+    const result = calculateNextReview(learningVerse, 4);
 
     expect(result.interval).toBe(3);
-    expect(result.repetitions).toBe(3);
+    expect(result.repetitions).toBe(4);
+  });
+
+  it("repetition is 3 case with perfect recall and rating > 2", () => {
+    const perfectRecall = { interval: 1, ease_factor: 2.6, repetitions: 3 };
+
+    const result = calculateNextReview(perfectRecall, 5);
+
+    expect(result.interval).toBe(
+      Math.round(perfectRecall.interval * perfectRecall.ease_factor),
+    );
+    expect(result.repetitions).toBe(4);
+    expect(result.ease_factor).toBe(
+      perfectRecall.ease_factor + (0.1 - (5 - 5) * 0.08),
+    );
   });
 });

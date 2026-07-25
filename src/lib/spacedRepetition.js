@@ -22,7 +22,7 @@ export function calculateNextReview(verse, rating) {
   // Ease factor controls how fast intervals grow.
   // Good reviews push it up, hard/again reviews pull it down.
   // Formula from SM-2 spec:
-  ease_factor = ease_factor + (0.1 - (4 - rating) * 0.08);
+  ease_factor = ease_factor + (0.1 - (5 - rating) * 0.08);
 
   // Ease factor never drops below 1.3 — prevents intervals
   // from shrinking to almost nothing on hard cards.
@@ -37,9 +37,9 @@ export function calculateNextReview(verse, rating) {
   } else if (rating >= 3 && rating < 5) {
     // Good or Easy — grow the interval.
     if (repetitions < 3) {
-      interval = 1; // first successful review: 1 day
+      interval = 1; // need 2 successful days to move on
     } else if (repetitions === 3) {
-      interval = 3; // second successful review: 3 days
+      interval = 3; // now we can increment after 3 good days
     } else {
       // After that, multiply by ease factor each time.
       // ease_factor starts at 2.5, so intervals roughly
