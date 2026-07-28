@@ -100,17 +100,74 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 - [x] Decide percentage-to-rating thresholds — 6 labels (Perfect/Good/Decent/Average/Need practice/Poor) mapping onto a **5-value** rating scale (adds a new "Perfect" = 5, extending `calculateNextReview` beyond its original 1-4).
 - [x] Trace/predict what `calculateNextReview` actually needs to change to support rating 5, before touching the code. Correctly predicted it would fall into the existing "grow interval" branch with a bigger ease-factor bump — technically already worked via fallthrough before any edit.
 - [x] Update `calculateNextReview` for the 5th rating + write tests locking in the new behavior. **Done 2026-07-25:** 5th (Perfect) branch in place; Good/Easy deliberately now takes 3 successful reviews before the 3-day jump (confirmed intent). Tests rewritten with intent-revealing names, no longer just echoing code output. Doc comments updated for the 1-5 scale. All 5 tests pass.
-- [ ] Write `scoreAttempt` as a pure, tested function (word-by-word comparison + percentage) — test-first, same pattern.
+- [x] Write `scoreAttempt` as a pure, tested function (word-by-word comparison + percentage) — test-first, same pattern. **Done 2026-07-25:** case-insensitive full match, 0.95 partial credit for punctuation-only mismatches, rounded to 2 decimals (not the nearest whole number — a real bug surfaced along the way, see [[averaging-and-rounding-math]] in the graph). Committed and pushed (`3cf8e8b`).
 - [ ] Write the percentage-to-rating mapping (6 buckets → 5 values, decided 2026-07-24) as its own tested function.
 - [ ] Rebuild `Practice.jsx`'s UI: typed input instead of reveal, wire up scoring + auto-rating.
 - [ ] Test end-to-end in the browser.
 - [ ] Commit.
 
-## Sections 7+ — remaining candidates (not yet detailed)
-
-- **Friends/social feature** — the original vision, best system-design practice (new tables, relationships, permissions).
-- **Hosting/deployment** — pick and configure real hosting; currently fully undecided.
+**Paused 2026-07-28** — deliberately parked here (3 of 6 tasks done) to pivot to Phase 2 below. Nothing lost; resume exactly where this left off whenever the frontend work comes back around.
 
 ---
 
-Next step: run `/next-lesson` — it takes Section 1 and breaks it into one task at a time. Nothing here gets built without you being able to explain it first.
+## Phase 2 — Distributed backend: the scripture reminder scheduler
+
+**Why this phase exists:** the goal driving it is backend/distributed-systems depth for big-tech infra interviews — not another frontend feature. The real problem it solves: reminding each user their verse review is due is, underneath, millions of independently-scheduled per-user jobs with retry/delivery requirements and predictable traffic spikes (Sunday mornings, Easter, Christmas). That's a genuine distributed-scheduling problem, not a toy one.
+
+### Locked decisions (2026-07-28)
+
+- **Language:** Python — already the learner's strongest language; the explicit goal is going deeper in it for backend work specifically.
+- **Task queue:** Celery + Redis — the standard Python distributed task queue; avoids reinventing retries, dedup, and worker-crash handling that Celery already solves.
+- **Data source:** connect directly to the existing Supabase Postgres (it's plain Postgres under a connection string) — a second database would only invent a consistency/sync problem that doesn't need to exist.
+- **Delivery channel:** email via a transactional provider (Resend/SendGrid) — every user already has one (Supabase Auth), and it avoids pulling frontend work (service workers, browser permissions) back into a backend-focused project.
+- **Scheduling trigger:** Celery Beat — keeps the periodic "who's due" check inside the same system as everything else, for one centralized, debuggable point instead of a second system (cron) running blind.
+- **Orchestration:** Docker Compose, multiple worker containers — containers and horizontal scaling first, before taking on Kubernetes' extra learning curve.
+- **Monitoring:** Flower — Celery's own dashboard, minimal setup, docs assume this exact stack. Prometheus/Grafana is a real candidate to add later once Flower feels too basic.
+- **Load testing:** Locust — load-test scenarios stay in Python instead of context-switching to k6's JavaScript.
+- **Hosting:** a cloud VM (DigitalOcean Droplet) — raw machine control on purpose, so killing a process or a node is something the learner directly causes and observes, not something a managed platform quietly papers over.
+
+### Section 7 — One task, one worker, running locally  [ ] not started
+**Deliverable:** trigger a Celery task from Python and watch a worker execute it, ending with a real test email landing in an inbox.
+**Concepts:** celery-task, celery-broker, celery-worker-process, redis-basics, api-keys-as-env-vars
+
+### Section 8 — Talking to the real data  [ ] not started
+**Deliverable:** a Python script connects to the existing Supabase Postgres and prints who's actually due for a review today.
+**Concepts:** postgres-connection-from-python, sql-querying-from-python, read-vs-write-db-access, credentials-management
+
+### Section 9 — The automatic heartbeat  [ ] not started
+**Deliverable:** Celery Beat runs on a timer, checks who's due, and fans that out into individual email jobs with no manual trigger.
+**Concepts:** celery-beat-periodic-tasks, fan-out-pattern, idempotency
+
+### Section 10 — Failure isn't the exception, it's the design  [ ] not started
+**Deliverable:** deliberately break email sending, watch Celery retry with backoff, then land in a clearly logged failure state once retries are exhausted.
+**Concepts:** celery-retries, exponential-backoff, dead-letter-handling, at-least-once-delivery
+
+### Section 11 — Going multi-worker with containers  [ ] not started
+**Deliverable:** the whole stack (Redis, Beat, several worker containers) runs with one `docker compose up`, with proof that jobs are actually split across workers.
+**Concepts:** docker-basics, dockerfile, docker-compose-file, container-networking, horizontal-scaling
+
+### Section 12 — Watching it live  [ ] not started
+**Deliverable:** a real-time Flower dashboard showing tasks, workers, and failures as they happen.
+**Concepts:** observability-basics, flower-dashboard, healthy-vs-falling-behind
+
+### Section 13 — Kill a worker on purpose  [ ] not started
+**Deliverable:** kill a worker container mid-job and prove the job still completes with nothing lost — the fault-tolerance demo.
+**Concepts:** fault-tolerance, task-acknowledgment-and-redelivery, chaos-testing
+
+### Section 14 — Prove it under load  [ ] not started
+**Deliverable:** Locust scenarios simulating an "Easter morning" traffic spike, with throughput/latency measured as worker count scales.
+**Concepts:** load-testing-basics, throughput-vs-latency, backpressure
+
+### Section 15 — Actually live  [ ] not started
+**Deliverable:** the full stack deployed to a real cloud VM via SSH, confirmed by real emails going out from a server that isn't the learner's laptop.
+**Concepts:** cloud-vm-setup, remote-docker-deployment, secrets-in-production
+
+## Sections 16+ — remaining candidates (not yet detailed)
+
+- **Friends/social feature** — the original vision, best system-design practice (new tables, relationships, permissions). Still parked, now behind the backend phase.
+- **Prometheus + Grafana** — natural upgrade from Flower once its dashboard feels too basic.
+- **Kubernetes** — natural upgrade from Docker Compose once containers/orchestration fundamentals from Section 11 are solid.
+
+---
+
+Next step: run `/next-lesson` — it takes the next open section (Section 7) and breaks it into one task at a time. Nothing here gets built without you being able to explain it first.

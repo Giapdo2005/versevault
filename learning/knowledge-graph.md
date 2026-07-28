@@ -79,6 +79,22 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** practicing
 **Depends on:** —
 **Evidence (2026-07-23):** Installed Vitest, wrote a first test after one explained example, self-corrected the reclaim-task assertion. Then, unprompted, wrote a *third* test entirely independently — asked "how do I get better at this," was pointed at "test every branch, test the boundaries," and immediately picked the exact untested `repetitions === 1` branch, wrote a correct test with no fill-ins, ran it, passed first try. Strong same-day evidence — capped at `practicing` per the no-same-day-`understood` rule; a great candidate to confirm as `understood` on a later-day review.
+**Evidence (2026-07-25):** Different day, mixed but real: initial draft for `scoreAttempt`'s test tried to fetch from Supabase inside the test — see [[pure-function-boundary]] — corrected once reminded of the `calculateNextReview` precedent. After that, wrote the exact-match test correctly (own choice of a real scripture verse as test data) and later wrote a second, harder test (missing punctuation) independently, which is what surfaced a real rounding bug. Testing habit is sticking, but still needs occasional reminders on fundamentals — not yet `understood`.
+
+### pure-function-boundary
+**Status:** introduced
+**Depends on:** automated-testing-basics
+**Evidence (2026-07-25):** First draft of a `scoreAttempt` test tried to pull real data from Supabase inside the test body. Corrected by pointing back to how `calculateNextReview` was tested (plain made-up literals, no external systems) — same principle, not yet independently recognized in a new context without that reminder.
+
+### averaging-and-rounding-math
+**Status:** practicing
+**Depends on:** —
+**Evidence (2026-07-25):** Wrote a test expecting a 10-point score drop from 2 missing commas (out of ~29 words), got `100` instead of the expected `90`. When asked to compute `(27×1 + 2×0.95) / 29 × 100` by hand, correctly got `99.65` — realized a 0.05-per-word penalty, diluted across many words, can't produce a 10-point swing. Made a real design call in response (round to 2 decimals instead of the nearest whole number, to preserve the small signal instead of losing it to rounding). Same-day introduction and resolution — capped at `practicing` per the no-same-day-`understood` rule.
+
+### return-statement-control-flow
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-25):** Wrote `console.log(...)` immediately after a `return` statement (dead code) plus a `Math.round(...).toFixed(2)` order-of-operations bug that silently discarded the decimal precision it was meant to preserve. Asked to trace both before running; fixed correctly (`Number(value.toFixed(2))`, dead code removed) but without narrating the reasoning back — credit is for the correct fix, not yet for demonstrated explanation.
 
 ### git-workflow
 **Status:** understood
@@ -89,3 +105,217 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** introduced
 **Depends on:** git-workflow
 **Evidence (2026-07-22):** Initially conflated "keep this off GitHub" with "gitignore it," which would have meant zero version history/backup for `learning/`. After the tradeoff was named (gitignore = no local backup either, vs. a private repo = backup + hidden from others), chose to commit everything instead. First contact with this specific distinction — worth a quick check next session rather than assuming it's locked in.
+
+---
+
+## Phase 2 — Distributed backend (scripture reminder scheduler)
+
+### python-for-backend-choice
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Named the real reason for Python (already known, wants to grow deeper specifically in backend work) rather than a generic "it's popular" answer.
+
+### celery-redis-vs-diy-queue
+**Status:** introduced
+**Depends on:** python-for-backend-choice
+**Evidence (2026-07-28):** Initial answer ("to distribute all the tasks") was too shallow to count as understanding the tradeoff; after being walked through what a hand-rolled queue would make the learner personally responsible for (lost tasks on worker crash, duplicate delivery, retry/backoff, timezone-aware scheduling), confirmed the concept landed ("i get it now"). Worth a real re-check next session, not just accepting same-day confirmation.
+
+### shared-database-vs-duplicate-db
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Correctly named the real cost of a second database unprompted — migration correctness and consistency between the two databases — without needing the answer walked through first.
+
+### email-vs-push-notification-tradeoff
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Needed a second prompt to name the specific mechanism (a service worker) rather than just agreeing email was easier; got there once asked directly what push notifications would require on the frontend.
+
+### celery-beat-vs-external-cron
+**Status:** introduced
+**Depends on:** celery-redis-vs-diy-queue
+**Evidence (2026-07-28):** Correctly identified the centralization/debuggability angle ("more centralized point so easier to debug and less heavywork for us") without needing the answer walked through.
+
+### docker-compose-vs-kubernetes-first
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Correctly reasoned that container fundamentals need to be solid before taking on orchestration complexity, unprompted.
+
+### flower-vs-prometheus-first
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Confirmed with a bare "yes" to a yes/no framing of the question — real but thin evidence, worth a fuller free-recall check next time this comes up.
+
+### locust-vs-k6
+**Status:** introduced
+**Depends on:** python-for-backend-choice
+**Evidence (2026-07-28):** Correctly tied the choice back to the standing goal of going deeper in Python specifically, not just tool preference.
+
+### raw-vm-vs-managed-platform
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-28):** Correctly named that owning the underlying machine matters because the point is to actually understand what's happening under the hood, not just tradeoffs in the abstract.
+
+### celery-task
+**Status:** seed
+**Depends on:** celery-redis-vs-diy-queue
+**Evidence:** Named in Section 7's concept list; not yet taught.
+
+### celery-broker
+**Status:** seed
+**Depends on:** celery-task
+**Evidence:** Named in Section 7's concept list; not yet taught.
+
+### celery-worker-process
+**Status:** seed
+**Depends on:** celery-broker
+**Evidence:** Named in Section 7's concept list; not yet taught.
+
+### redis-basics
+**Status:** seed
+**Depends on:** —
+**Evidence:** Named in Section 7's concept list; not yet taught.
+
+### api-keys-as-env-vars
+**Status:** seed
+**Depends on:** env-var-security
+**Evidence:** Named in Section 7's concept list; extends the existing `.env` pattern to a new service.
+
+### postgres-connection-from-python
+**Status:** seed
+**Depends on:** shared-database-vs-duplicate-db
+**Evidence:** Named in Section 8's concept list; not yet taught.
+
+### sql-querying-from-python
+**Status:** seed
+**Depends on:** postgres-connection-from-python
+**Evidence:** Named in Section 8's concept list; not yet taught.
+
+### read-vs-write-db-access
+**Status:** seed
+**Depends on:** postgres-connection-from-python
+**Evidence:** Named in Section 8's concept list; not yet taught.
+
+### credentials-management
+**Status:** seed
+**Depends on:** api-keys-as-env-vars
+**Evidence:** Named in Section 8's concept list; not yet taught.
+
+### celery-beat-periodic-tasks
+**Status:** seed
+**Depends on:** celery-beat-vs-external-cron
+**Evidence:** Named in Section 9's concept list; not yet taught.
+
+### fan-out-pattern
+**Status:** seed
+**Depends on:** celery-beat-periodic-tasks
+**Evidence:** Named in Section 9's concept list; not yet taught.
+
+### idempotency
+**Status:** seed
+**Depends on:** fan-out-pattern
+**Evidence:** Named in Section 9's concept list; not yet taught.
+
+### celery-retries
+**Status:** seed
+**Depends on:** celery-task
+**Evidence:** Named in Section 10's concept list; not yet taught.
+
+### exponential-backoff
+**Status:** seed
+**Depends on:** celery-retries
+**Evidence:** Named in Section 10's concept list; not yet taught.
+
+### dead-letter-handling
+**Status:** seed
+**Depends on:** celery-retries
+**Evidence:** Named in Section 10's concept list; not yet taught.
+
+### at-least-once-delivery
+**Status:** seed
+**Depends on:** idempotency, celery-retries
+**Evidence:** Named in Section 10's concept list; not yet taught.
+
+### docker-basics
+**Status:** seed
+**Depends on:** docker-compose-vs-kubernetes-first
+**Evidence:** Named in Section 11's concept list; not yet taught.
+
+### dockerfile
+**Status:** seed
+**Depends on:** docker-basics
+**Evidence:** Named in Section 11's concept list; not yet taught.
+
+### docker-compose-file
+**Status:** seed
+**Depends on:** dockerfile
+**Evidence:** Named in Section 11's concept list; not yet taught.
+
+### container-networking
+**Status:** seed
+**Depends on:** docker-compose-file
+**Evidence:** Named in Section 11's concept list; not yet taught.
+
+### horizontal-scaling
+**Status:** seed
+**Depends on:** docker-compose-file
+**Evidence:** Named in Section 11's concept list; not yet taught.
+
+### observability-basics
+**Status:** seed
+**Depends on:** flower-vs-prometheus-first
+**Evidence:** Named in Section 12's concept list; not yet taught.
+
+### flower-dashboard
+**Status:** seed
+**Depends on:** observability-basics
+**Evidence:** Named in Section 12's concept list; not yet taught.
+
+### healthy-vs-falling-behind
+**Status:** seed
+**Depends on:** flower-dashboard
+**Evidence:** Named in Section 12's concept list; not yet taught.
+
+### fault-tolerance
+**Status:** seed
+**Depends on:** horizontal-scaling
+**Evidence:** Named in Section 13's concept list; not yet taught.
+
+### task-acknowledgment-and-redelivery
+**Status:** seed
+**Depends on:** celery-worker-process, at-least-once-delivery
+**Evidence:** Named in Section 13's concept list; not yet taught.
+
+### chaos-testing
+**Status:** seed
+**Depends on:** fault-tolerance
+**Evidence:** Named in Section 13's concept list; not yet taught.
+
+### load-testing-basics
+**Status:** seed
+**Depends on:** locust-vs-k6
+**Evidence:** Named in Section 14's concept list; not yet taught.
+
+### throughput-vs-latency
+**Status:** seed
+**Depends on:** load-testing-basics
+**Evidence:** Named in Section 14's concept list; not yet taught.
+
+### backpressure
+**Status:** seed
+**Depends on:** throughput-vs-latency
+**Evidence:** Named in Section 14's concept list; not yet taught.
+
+### cloud-vm-setup
+**Status:** seed
+**Depends on:** raw-vm-vs-managed-platform
+**Evidence:** Named in Section 15's concept list; not yet taught.
+
+### remote-docker-deployment
+**Status:** seed
+**Depends on:** cloud-vm-setup, docker-compose-file
+**Evidence:** Named in Section 15's concept list; not yet taught.
+
+### secrets-in-production
+**Status:** seed
+**Depends on:** cloud-vm-setup, credentials-management
+**Evidence:** Named in Section 15's concept list; not yet taught.
