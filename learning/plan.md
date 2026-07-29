@@ -114,6 +114,16 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 
 **Why this phase exists:** the goal driving it is backend/distributed-systems depth for big-tech infra interviews — not another frontend feature. The real problem it solves: reminding each user their verse review is due is, underneath, millions of independently-scheduled per-user jobs with retry/delivery requirements and predictable traffic spikes (Sunday mornings, Easter, Christmas). That's a genuine distributed-scheduling problem, not a toy one.
 
+### Fast path to deployment (decided 2026-07-29)
+
+**Goal:** a real, live deployment within a week, for the resume — while still understanding every piece, not copy-pasting.
+
+**Deploy-critical path, in this order:** Section 7 → 8 → 9 → 11 → 15 → **README**. This is the minimum for "it's actually live and doing its job unattended": one working task, reading real data, running on a schedule, containerized, on a real VM.
+
+**Deferred until after deployment, not dropped:** Section 10 (retries/failure handling), Section 12 (Flower dashboard), Section 13 (kill-a-worker chaos test), Section 14 (Locust load test). None of these block having something live — they're real interview-story depth to add once the core is already running in production. Section 6's remaining typed-practice work (paused 2026-07-28) also resumes after this fast path.
+
+**New: README section**, right after Section 15 — a clean top-level `README.md` documenting what's actually deployed and how to run it, written once there's a real system to describe accurately (not aspirational docs for something not yet built).
+
 ### Locked decisions (2026-07-28)
 
 - **Language:** Python — already the learner's strongest language; the explicit goal is going deeper in it for backend work specifically.
@@ -161,6 +171,10 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 ### Section 15 — Actually live  [ ] not started
 **Deliverable:** the full stack deployed to a real cloud VM via SSH, confirmed by real emails going out from a server that isn't the learner's laptop.
 **Concepts:** cloud-vm-setup, remote-docker-deployment, secrets-in-production
+
+### Section README — a clean top-level README  [ ] not started
+**Deliverable:** a real `README.md`, written once Section 15 is live, accurately describing what VerseVault is, the stack (React/Supabase frontend + the new Python/Celery/Redis/Docker backend), how to run it locally, and what's actually deployed. Resume-facing, so it needs to read as a real, working project — not aspirational.
+**Concepts:** technical-writing-for-a-real-audience
 
 ## Sections 16+ — remaining candidates (not yet detailed)
 
