@@ -105,6 +105,7 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** introduced
 **Depends on:** git-workflow
 **Evidence (2026-07-22):** Initially conflated "keep this off GitHub" with "gitignore it," which would have meant zero version history/backup for `learning/`. After the tradeoff was named (gitignore = no local backup either, vs. a private repo = backup + hidden from others), chose to commit everything instead. First contact with this specific distinction — worth a quick check next session rather than assuming it's locked in.
+**Evidence (2026-07-29):** Related but different gap, same underlying file: created a `.gitignore` *inside* `backend/venv/` trying to exclude a sibling `.env`, instead of one line (`venv/`) in the *parent* `backend/.gitignore` — the same "ignore the whole folder from outside it, like `node_modules`" pattern from Section 1, not yet generalized to a new folder (`venv/`) without a fresh reminder.
 
 ---
 
@@ -156,29 +157,29 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-28):** Correctly named that owning the underlying machine matters because the point is to actually understand what's happening under the hood, not just tradeoffs in the abstract.
 
 ### celery-task
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-redis-vs-diy-queue
-**Evidence:** Named in Section 7's concept list; not yet taught.
+**Evidence (2026-07-29):** Taught the `@app.task` decorator (turns a normal function into one that can run via `.delay()` on a worker instead of inline) and successfully triggered `send_test_email.delay(...)` from a second terminal, confirmed by a real email arriving. Mechanism was explained, not independently derived — but correctly applied.
 
 ### celery-broker
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-task
-**Evidence:** Named in Section 7's concept list; not yet taught.
+**Evidence (2026-07-29):** Saw `broker="redis://localhost:6379/0"` in the app config and the worker's own startup log confirming `Connected to redis://localhost:6379/0` — connected the config to the real running Redis instance from the same session.
 
 ### celery-worker-process
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-broker
-**Evidence:** Named in Section 7's concept list; not yet taught.
+**Evidence (2026-07-29):** Wrong prediction, corrected: guessed `celery -A celery_app worker` would finish and return the prompt; actually a long-running process, same shape as `npm run dev`. After the correction, successfully ran it in a separate terminal, watched it register the task and connect to Redis, and watched it pick up and execute the real triggered task.
 
 ### redis-basics
-**Status:** seed
+**Status:** introduced
 **Depends on:** —
-**Evidence:** Named in Section 7's concept list; not yet taught.
+**Evidence (2026-07-29):** Correctly predicted Redis installs globally via Homebrew (matching the earlier Supabase CLI pattern). Started it with `brew services start redis`, confirmed it was actually reachable with `redis-cli ping` → `PONG` (didn't know the expected response beforehand, guessed wrong, corrected).
 
 ### api-keys-as-env-vars
-**Status:** seed
+**Status:** introduced
 **Depends on:** env-var-security
-**Evidence:** Named in Section 7's concept list; extends the existing `.env` pattern to a new service.
+**Evidence (2026-07-29):** Added `RESEND_API_KEY` to `backend/.env` without prompting for the pattern itself (already internalized from the frontend's `VITE_SUPABASE_*` vars) — real transfer of the concept to a new language/context. Repeated the earlier `.gitignore`-scope mistake in this new context (tried a nested `.gitignore` inside `venv/` instead of one line in `backend/.gitignore`) — see [[gitignore-scope]] — corrected the same way as before, suggesting the underlying concept hasn't fully generalized yet.
 
 ### postgres-connection-from-python
 **Status:** seed

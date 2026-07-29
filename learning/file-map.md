@@ -64,3 +64,11 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 - **`supabase/.gitignore`** — nested gitignore excluding CLI-generated temp/cache files (`.temp`, local env overrides). `known`.
 - **`supabase/schema.sql`** — a snapshot of the real `verses`/`reviews` table definitions and RLS policies, captured via `supabase db dump` (not a tracked migration — see [[db-pull-mystery]] for why `db pull` was the intended-but-unresolved path). `known` → [[rls-data-isolation]], [[schema-not-versioned]].
 - **`supabase/.temp/`** — CLI link-session cache (project ref, connection info). `generated`, gitignored, machine-made.
+
+## Backend (Python/Celery scheduler — Phase 2)
+
+- **`backend/venv/`** — Python virtual environment, scoped to this project only (same idea as `node_modules/`, different language). `generated`, gitignored (both by its own auto-created inner `.gitignore` and by `backend/.gitignore`), never edit, rebuildable via `python3 -m venv venv` + `pip install -r requirements.txt`.
+- **`backend/.gitignore`** — ignores `venv/` and `.env` from the `backend/` root. `known` → [[gitignore-scope]].
+- **`backend/requirements.txt`** — Python's equivalent of `package.json`: exact installed package versions (`celery`, `redis`, `resend`, `python-dotenv`), regenerated via `pip freeze`. `known`.
+- **`backend/.env`** — holds `RESEND_API_KEY`. Gitignored, never committed. `known` → [[api-keys-as-env-vars]].
+- **`backend/celery_app.py`** — defines the Celery app (connected to local Redis as its broker) and one task, `send_test_email`, sent via the Resend SDK. `known` — authored 2026-07-29 → [[celery-task]], [[celery-broker]], [[celery-worker-process]].

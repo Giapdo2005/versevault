@@ -136,9 +136,19 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 - **Load testing:** Locust — load-test scenarios stay in Python instead of context-switching to k6's JavaScript.
 - **Hosting:** a cloud VM (DigitalOcean Droplet) — raw machine control on purpose, so killing a process or a node is something the learner directly causes and observes, not something a managed platform quietly papers over.
 
-### Section 7 — One task, one worker, running locally  [ ] not started
+### Section 7 — One task, one worker, running locally  [x] done 2026-07-29
 **Deliverable:** trigger a Celery task from Python and watch a worker execute it, ending with a real test email landing in an inbox.
 **Concepts:** celery-task, celery-broker, celery-worker-process, redis-basics, api-keys-as-env-vars
+
+**Tasks:**
+- [x] Set up `backend/` folder with its own Python virtual environment.
+- [x] Install and start Redis locally (Homebrew), confirm it's running (`redis-cli ping` → `PONG`).
+- [x] Install Celery + redis client in the venv.
+- [x] Sign up for a transactional email provider (Resend), get an API key, store it in `backend/.env`.
+- [x] Write a minimal Celery app + one task that sends a test email.
+- [x] Start a worker, trigger the task, confirm a real email arrives.
+
+**Done 2026-07-29** — real email received. Along the way: correctly predicted Redis installs globally (same as the Supabase CLI), wrongly predicted the worker command would return control (corrected via the `npm run dev` analogy — a long-running process), and repeated the "nested `.gitignore` instead of one line in the parent" mistake from earlier with `venv/`, corrected the same way as before.
 
 ### Section 8 — Talking to the real data  [ ] not started
 **Deliverable:** a Python script connects to the existing Supabase Postgres and prints who's actually due for a review today.
