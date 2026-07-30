@@ -13,6 +13,8 @@ import psycopg2
 from celery import Celery
 from dotenv import load_dotenv
 import resend
+from celery.schedules import crontab
+
 
 load_dotenv()  # reads backend/.env into os.environ, same idea as Vite's import.meta.env
 
@@ -23,14 +25,11 @@ CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/
 # the message queue — the local Redis you started earlier.
 app = Celery("scheduler", broker=CELERY_BROKER_URL)
 
-# Beat schedule: what runs automatically, and how often.
-# TEMPORARY for local testing — 60 seconds, so we can watch it fire without
-# waiting a real day. Before Section 15 (deployment), this becomes a real
-# daily cadence, e.g. crontab(hour=7, minute=0) for 7am UTC daily.
+# Beat schedule: what runs automatically and hourly
 app.conf.beat_schedule = {
     "check-and-notify": {
         "task": "celery_app.check_and_notify",
-        "schedule": 60.0,  # seconds
+        "schedule": crontab(minute=0, hour='*'),  
     },
 }
 
