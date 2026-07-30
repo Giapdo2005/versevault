@@ -150,9 +150,11 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 
 **Done 2026-07-29** — real email received. Along the way: correctly predicted Redis installs globally (same as the Supabase CLI), wrongly predicted the worker command would return control (corrected via the `npm run dev` analogy — a long-running process), and repeated the "nested `.gitignore` instead of one line in the parent" mistake from earlier with `venv/`, corrected the same way as before.
 
-### Section 8 — Talking to the real data  [ ] not started
+### Section 8 — Talking to the real data  [x] done 2026-07-30
 **Deliverable:** a Python script connects to the existing Supabase Postgres and prints who's actually due for a review today.
 **Concepts:** postgres-connection-from-python, sql-querying-from-python, read-vs-write-db-access, credentials-management
+
+**Done 2026-07-30** — `backend/check_due.py`, real query, real results. Debugged through several genuine SQL mistakes independently (wrong column name, `GETDATE()` vs `NOW()`, the `= NULL` trap — verified empirically rather than just accepting the explanation). **Bonus, self-directed:** caught a real product bug by checking the live dashboard unprompted — new verses were immediately "due" because of `next_review_at`'s `DEFAULT now()`. Fixed at the schema level (`DEFAULT now() + interval '1 day'`) so every insert path benefits, not just the frontend; `supabase/schema.sql` refreshed to match. `read-vs-write-db-access` still `seed` — this section was read-only.
 
 ### Section 9 — The automatic heartbeat  [ ] not started
 **Deliverable:** Celery Beat runs on a timer, checks who's due, and fans that out into individual email jobs with no manual trigger.

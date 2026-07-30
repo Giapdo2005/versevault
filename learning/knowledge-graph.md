@@ -182,24 +182,34 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-29):** Added `RESEND_API_KEY` to `backend/.env` without prompting for the pattern itself (already internalized from the frontend's `VITE_SUPABASE_*` vars) — real transfer of the concept to a new language/context. Repeated the earlier `.gitignore`-scope mistake in this new context (tried a nested `.gitignore` inside `venv/` instead of one line in `backend/.gitignore`) — see [[gitignore-scope]] — corrected the same way as before, suggesting the underlying concept hasn't fully generalized yet.
 
 ### postgres-connection-from-python
-**Status:** seed
+**Status:** introduced
 **Depends on:** shared-database-vs-duplicate-db
-**Evidence:** Named in Section 8's concept list; not yet taught.
+**Evidence (2026-07-30):** Correctly reasoned (unprompted, before being told) that a raw DB connection needs a role/credential rather than the frontend's user-login model, and correctly named that this new credential needs to be treated with more care than the anon key since it bypasses RLS entirely. Used `psycopg2.connect()` successfully after debugging a real unfilled `[YOUR-PASSWORD]` placeholder in the copied connection string.
 
 ### sql-querying-from-python
-**Status:** seed
+**Status:** practicing
 **Depends on:** postgres-connection-from-python
-**Evidence:** Named in Section 8's concept list; not yet taught.
+**Evidence (2026-07-30):** Wrote the WHERE clause independently, through several real debugging rounds: wrong column name and `==` (JS syntax, invalid SQL), then `GETDATE()` (SQL Server syntax, not Postgres — self-corrected to `NOW()`), then `= NULL` (a real SQL trap — comparing to NULL with `=` never matches). Verified the `= NULL` behavior empirically rather than just accepting an explanation, and — once the schema fix made the NULL-check provably dead code — correctly proposed simplifying it away entirely. Strong session; capped at `practicing` per the no-same-day-`understood` rule.
 
 ### read-vs-write-db-access
 **Status:** seed
 **Depends on:** postgres-connection-from-python
-**Evidence:** Named in Section 8's concept list; not yet taught.
+**Evidence:** Not yet touched — Section 8 was read-only (`SELECT`). Real when write operations are needed (e.g., updating `last_reviewed_at` after sending a reminder).
 
 ### credentials-management
-**Status:** seed
+**Status:** introduced
 **Depends on:** api-keys-as-env-vars
-**Evidence:** Named in Section 8's concept list; not yet taught.
+**Evidence (2026-07-30):** Correctly reasoned that `DATABASE_URL` needs more care than the anon key before being told (transfer from `env-var-security`/`api-keys-as-env-vars`). Found and fixed the unfilled `[YOUR-PASSWORD]` placeholder in the connection string once flagged — a real, common credential-setup mistake.
+
+### sql-null-semantics
+**Status:** practicing
+**Depends on:** sql-querying-from-python
+**Evidence (2026-07-30):** Initially predicted `next_review_at = NULL` would still catch NULL rows (wrong — SQL's three-valued logic means `= NULL` never matches, even genuine NULLs). Rather than just accepting the correction, tested it empirically by adding a real verse through the UI and rerunning the script — which surfaced a *different*, real finding (see [[db-column-defaults]]) that made the question moot in practice, but the instinct to verify empirically rather than take the explanation on faith is the real skill here.
+
+### db-column-defaults
+**Status:** practicing
+**Depends on:** —
+**Evidence (2026-07-30):** Independently noticed, by checking the real Supabase dashboard (not prompted to), that `next_review_at`'s `DEFAULT now()` meant every new verse was immediately "due" — a real product bug with real consequences once Section 9 sends live emails. Proposed the fix (default to `now() + 1 day` instead), correctly identified the DB-level column default as the right place to fix it (works for every insert path, not just the frontend), and got the Postgres interval syntax right after one lookup. This was self-directed problem-finding, not a guided probe.
 
 ### celery-beat-periodic-tasks
 **Status:** seed
