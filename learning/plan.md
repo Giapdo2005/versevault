@@ -156,9 +156,18 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 
 **Done 2026-07-30** — `backend/check_due.py`, real query, real results. Debugged through several genuine SQL mistakes independently (wrong column name, `GETDATE()` vs `NOW()`, the `= NULL` trap — verified empirically rather than just accepting the explanation). **Bonus, self-directed:** caught a real product bug by checking the live dashboard unprompted — new verses were immediately "due" because of `next_review_at`'s `DEFAULT now()`. Fixed at the schema level (`DEFAULT now() + interval '1 day'`) so every insert path benefits, not just the frontend; `supabase/schema.sql` refreshed to match. `read-vs-write-db-access` still `seed` — this section was read-only.
 
-### Section 9 — The automatic heartbeat  [ ] not started
+### Section 9 — The automatic heartbeat  [x] done 2026-07-30
 **Deliverable:** Celery Beat runs on a timer, checks who's due, and fans that out into individual email jobs with no manual trigger.
 **Concepts:** celery-beat-periodic-tasks, fan-out-pattern, idempotency
+
+**Tasks:**
+- [x] Decide the local test interval (short, e.g. every minute — will change to daily before Section 15) and the real production cadence (daily, re-remind until reviewed).
+- [x] Turn `check_due.py`'s query into a proper Celery task; join with `auth.users` to get real email addresses.
+- [x] Fan out: for each due user, queue a real reminder email task.
+- [x] Configure Celery Beat's schedule, start it in a third terminal, watch it fire with no manual trigger.
+- [x] Observe what happens on repeated fires before a verse is reviewed — decide and implement the idempotency guard.
+
+**Done 2026-07-30** — full loop verified empirically, both directions: manually set a test verse's `next_review_at` to the past, watched Beat's next cycle fan out a real `send_reminder_email` job, confirmed a real email arrived, confirmed `last_reminded_at` was written only after the successful send, then waited a second cycle and confirmed **no duplicate email** — the idempotency guard actually works, not just compiles. Two real bugs caught and fixed along the way: `.delay()` missing from the fan-out call (defaulted to synchronous execution), and the idempotency guard initially not subtracting the day interval (`<= NOW()` is always true once set, not just within a day). Also cleaned up two gitignore gaps: `celerybeat-schedule*` (proposed independently, small typo only) and `backend/__pycache__/` (was accidentally committed before being gitignored — introduced `git rm --cached` to untrack without deleting).
 
 ### Section 10 — Failure isn't the exception, it's the design  [ ] not started
 **Deliverable:** deliberately break email sending, watch Celery retry with backoff, then land in a clearly logged failure state once retries are exhausted.

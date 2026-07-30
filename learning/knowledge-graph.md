@@ -106,6 +106,12 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Depends on:** git-workflow
 **Evidence (2026-07-22):** Initially conflated "keep this off GitHub" with "gitignore it," which would have meant zero version history/backup for `learning/`. After the tradeoff was named (gitignore = no local backup either, vs. a private repo = backup + hidden from others), chose to commit everything instead. First contact with this specific distinction — worth a quick check next session rather than assuming it's locked in.
 **Evidence (2026-07-29):** Related but different gap, same underlying file: created a `.gitignore` *inside* `backend/venv/` trying to exclude a sibling `.env`, instead of one line (`venv/`) in the *parent* `backend/.gitignore` — the same "ignore the whole folder from outside it, like `node_modules`" pattern from Section 1, not yet generalized to a new folder (`venv/`) without a fresh reminder.
+**Evidence (2026-07-30):** Real forward progress — asked to propose the pattern for three related `celerybeat-schedule*` files unprompted, correctly reasoned to a wildcard glob in the parent `backend/.gitignore` (one small typo, not a conceptual miss). The core "ignore the whole thing from outside it" idea is sticking; still needed the *new* `__pycache__` gap pointed out rather than catching it independently.
+
+### git-untrack-after-gitignore
+**Status:** introduced
+**Depends on:** gitignore-scope
+**Evidence (2026-07-30):** New concept: `backend/__pycache__/` had been committed before `.gitignore` covered it — adding the ignore rule doesn't retroactively untrack already-committed files. Taught `git rm -r --cached` (removes from git's tracking without deleting the real file, since Python regenerates it anyway); applied correctly, verified with `git ls-files`.
 
 ---
 
@@ -192,9 +198,9 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-30):** Wrote the WHERE clause independently, through several real debugging rounds: wrong column name and `==` (JS syntax, invalid SQL), then `GETDATE()` (SQL Server syntax, not Postgres — self-corrected to `NOW()`), then `= NULL` (a real SQL trap — comparing to NULL with `=` never matches). Verified the `= NULL` behavior empirically rather than just accepting an explanation, and — once the schema fix made the NULL-check provably dead code — correctly proposed simplifying it away entirely. Strong session; capped at `practicing` per the no-same-day-`understood` rule.
 
 ### read-vs-write-db-access
-**Status:** seed
+**Status:** introduced
 **Depends on:** postgres-connection-from-python
-**Evidence:** Not yet touched — Section 8 was read-only (`SELECT`). Real when write operations are needed (e.g., updating `last_reviewed_at` after sending a reminder).
+**Evidence (2026-07-30):** Correctly reasoned, unprompted, that `last_reminded_at` should only be written *after* a successful send, not before — the real consequence of read vs. write ordering when a write has side effects (an email) that can't be undone. Implemented and verified: the `UPDATE` only runs past a successful `resend.Emails.send()` call.
 
 ### credentials-management
 **Status:** introduced
@@ -212,19 +218,19 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-30):** Independently noticed, by checking the real Supabase dashboard (not prompted to), that `next_review_at`'s `DEFAULT now()` meant every new verse was immediately "due" — a real product bug with real consequences once Section 9 sends live emails. Proposed the fix (default to `now() + 1 day` instead), correctly identified the DB-level column default as the right place to fix it (works for every insert path, not just the frontend), and got the Postgres interval syntax right after one lookup. This was self-directed problem-finding, not a guided probe.
 
 ### celery-beat-periodic-tasks
-**Status:** seed
+**Status:** practicing
 **Depends on:** celery-beat-vs-external-cron
-**Evidence:** Named in Section 9's concept list; not yet taught.
+**Evidence (2026-07-30):** Configured `app.conf.beat_schedule`, ran Beat in a third terminal alongside the worker, watched `check_and_notify` fire automatically every 60 seconds with zero manual trigger — verified via real worker log timestamps, not assumed.
 
 ### fan-out-pattern
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-beat-periodic-tasks
-**Evidence:** Named in Section 9's concept list; not yet taught.
+**Evidence (2026-07-30):** First fill-in called `send_reminder_email(verse_id, email, reference)` directly instead of `.delay(...)` — same mistake-shape as the `positional-vs-object-arguments` gap, a plain function call instead of queuing. Corrected once asked to recall the Section 7 distinction (called plainly vs. `.delay()`), applied correctly after.
 
 ### idempotency
-**Status:** seed
+**Status:** practicing
 **Depends on:** fan-out-pattern
-**Evidence:** Named in Section 9's concept list; not yet taught.
+**Evidence (2026-07-30):** Correctly reasoned about the design ("a user should get reminded daily... only if we've sent it successfully") before any code was written. First implementation attempt (`last_reminded_at <= NOW()`) didn't actually implement the "within the last day" guard — matched a wrong prediction pattern (looked plausible, didn't hold up when traced through). Corrected to `<= NOW() - interval '1 day'` once asked to trace what the original condition actually excluded (nothing — true forever once set). **Verified empirically, both directions:** watched a real email fire when due, then watched a second Beat cycle 60 seconds later correctly send nothing — proof the guard works, not just code that compiles.
 
 ### celery-retries
 **Status:** seed

@@ -53,7 +53,8 @@ CREATE TABLE IF NOT EXISTS "public"."verses" (
     "ease_factor" double precision DEFAULT 2.5,
     "repetitions" integer DEFAULT 0,
     "next_review_at" timestamp with time zone DEFAULT ("now"() + '1 day'::interval),
-    "last_reviewed_at" timestamp with time zone
+    "last_reviewed_at" timestamp with time zone,
+    "last_reminded_at" timestamp with time zone
 );
 
 
