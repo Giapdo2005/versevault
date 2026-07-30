@@ -1,0 +1,31 @@
+# backend/docker-compose.yml
+#
+# Three services: redis (the broker), worker (executes tasks), beat (the
+# scheduler). `docker compose up` starts all three together, networked so
+# they can reach each other by service name.
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  worker:
+    build: .
+    depends_on:
+      - redis
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    command: celery -A celery_app worker --loglevel=info
+
+  beat:
+    build: .
+    depends_on:
+      - redis
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    command: celery -A celery_app beat --loglevel=info

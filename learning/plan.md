@@ -173,9 +173,17 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 **Deliverable:** deliberately break email sending, watch Celery retry with backoff, then land in a clearly logged failure state once retries are exhausted.
 **Concepts:** celery-retries, exponential-backoff, dead-letter-handling, at-least-once-delivery
 
-### Section 11 — Going multi-worker with containers  [ ] not started
+### Section 11 — Going multi-worker with containers  [x] done 2026-07-30
 **Deliverable:** the whole stack (Redis, Beat, several worker containers) runs with one `docker compose up`, with proof that jobs are actually split across workers.
 **Concepts:** docker-basics, dockerfile, docker-compose-file, container-networking, horizontal-scaling
+
+**Tasks:**
+- [x] Write a `Dockerfile` for the backend (Python base image, install `requirements.txt`, copy code).
+- [x] Write `docker-compose.yml`: services for `redis`, `worker`, `beat`.
+- [x] Get it running as a single instance of each service — debug container networking (`localhost` means something different inside a container).
+- [x] Scale to multiple worker containers and prove tasks actually get distributed across them, not just one.
+
+**Done 2026-07-30** — full stack (`redis`, `worker`, `beat`) runs with one `docker compose up --build`. Correctly predicted `localhost` wouldn't work across containers before being told; fixed via `CELERY_BROKER_URL` env var (`redis://redis:6379/0` from Compose, defaults to `localhost` for bare-venv runs). Added non-root execution (`useradd appuser` + `chown` + `USER appuser`) after seeing Celery's own root warning — real second-order bug from that fix: Beat couldn't write its own `celerybeat-schedule` file until `chown -R` covered the whole `/app` dir first. Scaled to 3 worker containers (`--scale worker=3`), correctly predicted 5 total containers. Real distribution proof: triggered 6 `send_test_email` jobs, confirmed via container logs that all three `worker-1`/`worker-2`/`worker-3` each picked up different task IDs — genuine load-spread, not just configured-and-assumed. Diagnosed and fixed a real infra bug along the way: an old Homebrew Redis (`brew services start redis`, Section 7, never stopped) was silently bound to the same port as Docker's Redis, so triggered tasks got real task IDs but no worker ever received them — caught via `lsof -i :6379`, fixed by stopping the Homebrew service. Also fixed `check_and_notify`'s Supabase connection: Docker had no outbound IPv6 route and Supabase's direct connection string resolves to IPv6-only, so every cycle failed with "Network is unreachable" — switched `DATABASE_URL` to Supabase's IPv4-compatible **connection pooler** (transaction mode, port 6543), correctly reasoning through Session-vs-Transaction mode first (transaction mode fits because each task opens one short-lived connection for one query, no session state held across calls). Along the way, a DB password was accidentally exposed in plaintext logs — rotated it immediately rather than treating the leak as low-stakes.
 
 ### Section 12 — Watching it live  [ ] not started
 **Deliverable:** a real-time Flower dashboard showing tasks, workers, and failures as they happen.

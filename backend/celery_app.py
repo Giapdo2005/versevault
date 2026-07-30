@@ -17,10 +17,11 @@ import resend
 load_dotenv()  # reads backend/.env into os.environ, same idea as Vite's import.meta.env
 
 resend.api_key = os.environ["RESEND_API_KEY"]
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", "redis://localhost:6379/0")
 
 # "scheduler" is just this app's name. broker=... tells Celery where to find
 # the message queue — the local Redis you started earlier.
-app = Celery("scheduler", broker="redis://localhost:6379/0")
+app = Celery("scheduler", broker=CELERY_BROKER_URL)
 
 # Beat schedule: what runs automatically, and how often.
 # TEMPORARY for local testing — 60 seconds, so we can watch it fire without

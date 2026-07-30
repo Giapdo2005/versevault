@@ -253,29 +253,29 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence:** Named in Section 10's concept list; not yet taught.
 
 ### docker-basics
-**Status:** seed
+**Status:** practicing
 **Depends on:** docker-compose-vs-kubernetes-first
-**Evidence:** Named in Section 11's concept list; not yet taught.
+**Evidence (2026-07-30):** Correctly reasoned, when asked, why Redis needed its own container rather than living inside the app container ("if one goes down, the other can still stay up") — independently arrived at the isolation/blast-radius rationale, not just told it. Ran the full build/up/scale cycle repeatedly and correctly read `docker compose ps`/build output to confirm state.
 
 ### dockerfile
-**Status:** seed
+**Status:** practicing
 **Depends on:** docker-basics
-**Evidence:** Named in Section 11's concept list; not yet taught.
+**Evidence (2026-07-30):** Wrote and iterated on a real `Dockerfile` (layer-cached `requirements.txt` install before `COPY . .`, then added non-root execution after seeing Celery's own root `SecurityWarning`). Asked a real pushback question when told to add `useradd`/`chown`/`USER appuser` — "doesnt that defeat our whole root purpose" — correctly resolved once given the least-privilege/scoped-`chown`-vs-full-root distinction, not just accepted.
 
 ### docker-compose-file
-**Status:** seed
+**Status:** practicing
 **Depends on:** dockerfile
-**Evidence:** Named in Section 11's concept list; not yet taught.
+**Evidence (2026-07-30):** Wrote `docker-compose.yml` with three services (`redis`, `worker`, `beat`), correctly asked "what does environment do here" rather than copying it blind, and connected the answer to the `CELERY_BROKER_URL` env-var pattern already used with `RESEND_API_KEY`/`DATABASE_URL`.
 
 ### container-networking
-**Status:** seed
+**Status:** practicing
 **Depends on:** docker-compose-file
-**Evidence:** Named in Section 11's concept list; not yet taught.
+**Evidence (2026-07-30):** Wrong prediction, corrected: guessed `localhost` would still reach Redis from inside a worker container ("i thijnk it still does") — actually `localhost` inside a container refers only to that container itself; containers reach each other by service name. Corrected via `CELERY_BROKER_URL=redis://redis:6379/0`, confirmed via the worker's own startup log. Real second networking bug found and fixed independently in this same section: an old Homebrew Redis (never stopped since Section 7) was bound to the same host port as Docker's Redis, so triggered tasks got real task IDs but no container worker ever received them — diagnosed via `lsof -i :6379`, two separate brokers silently coexisting on one port.
 
 ### horizontal-scaling
-**Status:** seed
+**Status:** practicing
 **Depends on:** docker-compose-file
-**Evidence:** Named in Section 11's concept list; not yet taught.
+**Evidence (2026-07-30):** Correctly predicted 5 total containers before scaling ("i expect 5 containers then") given `--scale worker=3` plus `redis`+`beat`. Verified real distribution, not assumed: triggered 6 `send_test_email` jobs and confirmed via container logs that `worker-1`/`worker-2`/`worker-3` each picked up different task IDs — genuine load-spread across processes.
 
 ### observability-basics
 **Status:** seed
@@ -336,3 +336,18 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Status:** seed
 **Depends on:** cloud-vm-setup, credentials-management
 **Evidence:** Named in Section 15's concept list; not yet taught.
+
+### least-privilege-containers
+**Status:** introduced
+**Depends on:** dockerfile
+**Evidence (2026-07-30):** After seeing Celery's real root-user `SecurityWarning`, added `useradd --create-home appuser` + `USER appuser` to the Dockerfile. Pushed back with a genuine question ("doesnt that defeat our whole root purpose") rather than just accepting the fix — resolved via the scoped-`chown`-vs-full-root distinction (the running process gets write access to exactly `/app`, not the whole machine). Real second-order consequence surfaced and fixed: Beat couldn't write its own `celerybeat-schedule` file (`Permission denied`) until `chown -R appuser:appuser /app` ran *before* `USER appuser`, not after.
+
+### db-connection-pooling
+**Status:** introduced
+**Depends on:** postgres-connection-from-python
+**Evidence (2026-07-30):** `check_and_notify` failed every cycle inside Docker with "Network is unreachable" — Supabase's direct connection string resolves to an IPv6-only address, and the container had no outbound IPv6 route. Correctly reasoned through the fix's tradeoff before being given the answer: asked to predict Session-vs-Transaction pooling mode for a connect→one-query→close pattern, first guessed Session, self-corrected to Transaction with the right reasoning ("its a one time thing and not an ongoing session") before being told which was right. Switched `DATABASE_URL` to the transaction-mode pooler (port 6543), confirmed via a clean `check_and_notify succeeded` log line.
+
+### credential-leak-response
+**Status:** introduced
+**Depends on:** credentials-management
+**Evidence (2026-07-30):** A real DB password appeared in plaintext in Docker logs (surfaced by a `ppostgresql://` typo causing a DSN-parse error that echoed the full connection string). Rotated the password immediately rather than treating a logged/leaked secret as still safe to use — correct instinct: once a credential has been printed anywhere, it should be treated as burned, not just "probably fine."
