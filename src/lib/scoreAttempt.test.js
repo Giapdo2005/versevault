@@ -1,10 +1,36 @@
-// src/lib/scoreAttempt.test.js
 import { describe, it, expect } from "vitest";
-import { scoreAttempt } from "./scoreAttempt";
+import { scoreAttempt, compareWords } from "./scoreAttempt";
+
+describe("compareWords", () => {
+  it("tags each word as match, partial, or miss", () => {
+    const typed = "For God so loves the wrold";
+    const actual = "For God so loved the world";
+
+    const result = compareWords(typed, actual);
+
+    expect(result).toEqual([
+      { word: "For", typedWord: "For", status: "match" },
+      { word: "God", typedWord: "God", status: "match" },
+      { word: "so", typedWord: "so", status: "match" },
+      { word: "loved", typedWord: "loves", status: "miss" },
+      { word: "the", typedWord: "the", status: "match" },
+      { word: "world", typedWord: "wrold", status: "miss" },
+    ]);
+  });
+
+  it("treats a punctuation-only difference as partial", () => {
+    const typed = "brothers";
+    const actual = "brothers,";
+
+    const result = compareWords(typed, actual);
+
+    expect(result).toEqual([
+      { word: "brothers,", typedWord: "brothers", status: "partial" },
+    ]);
+  });
+});
 
 describe("scoreAttempt", () => {
-  // TODO(you): write a test where the typed text matches exactly
-  // (case-insensitive) — should score 100.
   it("this is a perfect recall practice", () => {
     const typed_verse =
       "so teach us to number our days that we might present to you a heart of wisdom";

@@ -12,24 +12,39 @@ function stripPunctuation(word) {
   return word.replace(/[^\w]/g, "");
 }
 
-export function scoreAttempt(typedText, actualText) {
+// Compares typed vs. actual text word by word, returning both the real
+// word and the typed word alongside a status: "match" (exact,
+// case-insensitive), "partial" (letters match, punctuation doesn't), or
+// "miss" (wrong or missing). Shared by scoreAttempt (turns statuses into
+// a percentage) and the Practice UI (turns statuses into colored text).
+export function compareWords(typedText, actualText) {
   const typedWords = typedText.trim().split(/\s+/);
   const actualWords = actualText.trim().split(/\s+/);
 
-  const totalScore = actualWords.reduce((sum, actualWord, i) => {
+  return actualWords.map((actualWord, i) => {
     const typedWord = typedWords[i] || ""; // missing word = empty string, not undefined
 
     if (typedWord.toLowerCase() === actualWord.toLowerCase()) {
-      return sum + 1; // exact match, case doesn't matter
+      return { word: actualWord, typedWord, status: "match" };
     }
     if (
       stripPunctuation(typedWord).toLowerCase() ===
       stripPunctuation(actualWord).toLowerCase()
     ) {
-      return sum + PUNCTUATION_PARTIAL_CREDIT; // letters match, punctuation doesn't
+      return { word: actualWord, typedWord, status: "partial" };
     }
+    return { word: actualWord, typedWord, status: "miss" };
+  });
+}
+
+export function scoreAttempt(typedText, actualText) {
+  const comparison = compareWords(typedText, actualText);
+
+  const totalScore = comparison.reduce((sum, { status }) => {
+    if (status === "match") return sum + 1; // exact match, case doesn't matter
+    if (status === "partial") return sum + PUNCTUATION_PARTIAL_CREDIT; // letters match, punctuation doesn't
     return sum; // letters don't match — no credit
   }, 0);
 
-  return Number(((totalScore / actualWords.length) * 100).toFixed(2));
+  return Number(((totalScore / comparison.length) * 100).toFixed(2));
 }

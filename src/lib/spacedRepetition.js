@@ -4,9 +4,9 @@
 // No React, no Supabase — just math.
 
 // Ratings:
-//   1 = Again    — complete blank, couldn't recall
-//   2 = Hard     — recalled but with significant difficulty
-//   3 = Good     — recalled with some effort
+//   1 = Need Practice    — complete blank, couldn't recall
+//   2 = Average     — recalled but with significant difficulty
+//   3 = Decent     — recalled with some effort
 //   4 = Easy     — recalled comfortably
 //   5 = Perfect  — flawless, effortless recall (typed-practice only)
 

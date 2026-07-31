@@ -51,9 +51,19 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-24 introduced, 2026-07-25 applied):** 07-24: flagged that a test's expected value had been edited to match new code output rather than asserting intent — acknowledged, not yet corrected. 07-25, different day: rewrote the tests with clear intent-revealing names ("repetitions is 2 with rating of 3" / "...3 with rating of 4"), each pinned to the specific `repetitions` threshold that triggers each interval — real correction, not just re-agreeing. All 5 tests pass (`npx vitest run`, verified 2026-07-25).
 
 ### self-report-practice
-**Status:** seed
+**Status:** understood
 **Depends on:** —
-**Evidence:** Named as a known product gap (Phase 1: practice is reveal + self-rate, no typed-recall checking) but not yet probed as a design decision — candidate for a forward-plan section since it's parking-lot work.
+**Evidence (2026-07-21 named, closed 2026-07-31):** Named as a known product gap in Phase 1 (practice was reveal + self-rate, no real recall checking). Closed for real 2026-07-31: `Practice.jsx` now uses typed recall — `scoreAttempt`/`compareWords` score the actual typed text against the verse, `percentageToRating` auto-determines the SM-2 rating, no self-report buttons remain. Drove the UI iteration directly from feedback across two rounds (added a "Correct version" comparison box, then corrected the first box to show typed words with only true misses flagged, no padding) — real product ownership, not just accepting a first draft.
+
+### percentage-to-rating-mapping
+**Status:** practicing
+**Depends on:** self-report-practice
+**Evidence (2026-07-31):** Wrote `percentageToRating` + 8 boundary tests test-first. Caught two real bugs before any implementation existed: the "Need Practice" bucket was first written as `>50%` (would never match anything — 30 isn't greater than 50), corrected to `<50%` once asked to trace a concrete value through it; then a test asserted `50%` → rating 1, contradicting the just-agreed table (`50-69.99% = Average = 2`), corrected once traced against the table. Also predicted, before running anything, that a missing `export` keyword would break the test file's named import — found and fixed it independently, confirmed with a real passing test run.
+
+### reduce-accumulator-pattern
+**Status:** introduced
+**Depends on:** —
+**Evidence (2026-07-31):** Asked directly where `sum` gets initialized in `scoreAttempt`'s `.reduce()` call — hadn't spotted that the initial value is `.reduce()`'s second argument, easy to miss since it sits below the callback body. Walked through step-by-step (`sum` in → callback return → `sum` for the next call) with a concrete word-by-word trace. Not yet independently demonstrated in a new context.
 
 ### env-var-security
 **Status:** understood

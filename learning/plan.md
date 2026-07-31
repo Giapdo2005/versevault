@@ -101,12 +101,14 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 - [x] Trace/predict what `calculateNextReview` actually needs to change to support rating 5, before touching the code. Correctly predicted it would fall into the existing "grow interval" branch with a bigger ease-factor bump — technically already worked via fallthrough before any edit.
 - [x] Update `calculateNextReview` for the 5th rating + write tests locking in the new behavior. **Done 2026-07-25:** 5th (Perfect) branch in place; Good/Easy deliberately now takes 3 successful reviews before the 3-day jump (confirmed intent). Tests rewritten with intent-revealing names, no longer just echoing code output. Doc comments updated for the 1-5 scale. All 5 tests pass.
 - [x] Write `scoreAttempt` as a pure, tested function (word-by-word comparison + percentage) — test-first, same pattern. **Done 2026-07-25:** case-insensitive full match, 0.95 partial credit for punctuation-only mismatches, rounded to 2 decimals (not the nearest whole number — a real bug surfaced along the way, see [[averaging-and-rounding-math]] in the graph). Committed and pushed (`3cf8e8b`).
-- [ ] Write the percentage-to-rating mapping (6 buckets → 5 values, decided 2026-07-24) as its own tested function.
-- [ ] Rebuild `Practice.jsx`'s UI: typed input instead of reveal, wire up scoring + auto-rating.
-- [ ] Test end-to-end in the browser.
-- [ ] Commit.
+- [x] Write the percentage-to-rating mapping (6 buckets → 5 values, decided 2026-07-24) as its own tested function. **Done 2026-07-31:** `src/lib/percentageToRating.js` + 8 boundary tests. Caught two real bugs before writing any implementation: the "Need Practice" bucket was first written as `>50%` (would never match anything, since 30% doesn't satisfy `30 > 50`), corrected to `<50%`; then a test asserted exactly `50%` → rating 1, contradicting the just-agreed table (`50-69.99% = Average = 2`), corrected once traced against the table. Predicted-then-confirmed a missing `export` keyword would break the named import before running anything — found and fixed it independently, verified with a real test run (8/8 passing).
+- [x] Rebuild `Practice.jsx`'s UI: typed input instead of reveal, wire up scoring + auto-rating.
+- [x] Test end-to-end in the browser.
+- [x] Commit.
 
-**Paused 2026-07-28** — deliberately parked here (3 of 6 tasks done) to pivot to Phase 2 below. Nothing lost; resume exactly where this left off whenever the frontend work comes back around.
+**Paused 2026-07-28** — deliberately parked here (3 of 6 tasks done) to pivot to Phase 2 below. Nothing lost; resumed exactly where this left off.
+
+**Resumed and finished 2026-07-31** — decided to prioritize finishing the app itself (this + Section 10) over continuing the Section 15 deployment blocker (stuck on Oracle Cloud account setup). `Practice.jsx` rebuilt: textarea replaces reveal-and-buttons, `handleSubmitAttempt` scores the attempt and shows results (score %, rating label, word-by-word comparison), `handleRate` is now only called by a "Continue" button so the learner can actually see their score before the save+navigate happens. Along the way: refactored `scoreAttempt.js` to extract a shared `compareWords` helper (word-level match/partial/miss + both words) reused by both the score calculation and the UI, instead of duplicating the matching logic — verified the refactor didn't change `scoreAttempt`'s existing test results before building on top of it. Iterated twice on the results UI from direct feedback: added a second "Correct version" box for side-by-side comparison, then reworked the first box to show the user's own typed words (not the correct ones) with only true misses in red — initially over-styled (bold + underline) and padded missing words with `___` placeholders "to match length," both trimmed down to plain red text and no padding once flagged as unwanted.
 
 ---
 
@@ -121,6 +123,8 @@ Promoted from the parking lot (chosen 2026-07-24, ahead of Friends). Replaces th
 **Deploy-critical path, in this order:** Section 7 → 8 → 9 → 11 → 15 → **README**. This is the minimum for "it's actually live and doing its job unattended": one working task, reading real data, running on a schedule, containerized, on a real VM.
 
 **Deferred until after deployment, not dropped:** Section 10 (retries/failure handling), Section 12 (Flower dashboard), Section 13 (kill-a-worker chaos test), Section 14 (Locust load test). None of these block having something live — they're real interview-story depth to add once the core is already running in production. Section 6's remaining typed-practice work (paused 2026-07-28) also resumes after this fast path.
+
+**Reprioritized 2026-07-31:** got stuck on Oracle Cloud account setup (Section 15 blocker) and decided to make the app itself more complete first rather than wait on that. New order: finish **Section 6** (typed-recall practice, resume at task 4/6) and **Section 10** (retry/failure handling) now, then return to Section 15 deployment once both are done. Sections 12-14 stay deferred until after deployment either way.
 
 **New: README section**, right after Section 15 — a clean top-level `README.md` documenting what's actually deployed and how to run it, written once there's a real system to describe accurately (not aspirational docs for something not yet built).
 

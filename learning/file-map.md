@@ -24,15 +24,17 @@ Status legend: `known` (demonstrated in conversation) · `introduced` (partially
 
 - **`src/lib/spacedRepetition.js`** — Pure logic, no React/Supabase: `calculateNextReview` (SM-2 algorithm, now a 1-5 rating scale after adding "Perfect" for typed-recall practice), `isDueForReview`, `getDueVerses`. `known` → [[sm2-algorithm]].
 - **`src/lib/spacedRepetition.test.js`** — Unit tests for `calculateNextReview`, rewritten 2026-07-25 with intent-revealing names covering all 5 rating branches. `known` → [[sm2-algorithm]], [[automated-testing-basics]], [[test-should-assert-intent]].
-- **`src/lib/scoreAttempt.js`** — Pure function comparing typed text against actual verse text, word-by-word: full credit for a case-insensitive match, 0.95 partial credit for punctuation-only mismatches, 0 otherwise; returns a percentage rounded to 2 decimals. `known` — authored 2026-07-25 → [[averaging-and-rounding-math]].
-- **`src/lib/scoreAttempt.test.js`** — Tests for `scoreAttempt`: an exact match (real scripture text used as test data) and a punctuation-mismatch case that surfaced the rounding bug. `known` — authored 2026-07-25 → [[pure-function-boundary]], [[averaging-and-rounding-math]].
+- **`src/lib/scoreAttempt.js`** — Pure functions comparing typed text against actual verse text, word-by-word: full credit for a case-insensitive match, 0.95 partial credit for punctuation-only mismatches, 0 otherwise. `compareWords` (added 2026-07-31) does the actual word-by-word matching and returns `{ word, typedWord, status }` per word; `scoreAttempt` reduces those statuses into a percentage. Shared by the scorer and the Practice UI so the matching logic isn't duplicated. `known` — authored 2026-07-25, refactored 2026-07-31 → [[averaging-and-rounding-math]], [[reduce-accumulator-pattern]].
+- **`src/lib/scoreAttempt.test.js`** — Tests for `scoreAttempt` (exact match, a punctuation-mismatch case that surfaced the rounding bug) and `compareWords` (per-word match/partial/miss tagging, including a typo case). `known` — authored 2026-07-25, extended 2026-07-31 → [[pure-function-boundary]], [[averaging-and-rounding-math]].
+- **`src/lib/percentageToRating.js`** — Pure function mapping a `scoreAttempt` percentage onto the 1-5 SM-2 rating scale (5 buckets: Need Practice/Average/Decent/Good/Perfect). `known` — authored 2026-07-31, test-first → [[percentage-to-rating-mapping]].
+- **`src/lib/percentageToRating.test.js`** — 8 boundary tests, one pair per bucket transition (e.g. `84.99` vs `85`). `known` — authored 2026-07-31 → [[percentage-to-rating-mapping]].
 
 ## Pages
 
 - **`src/pages/Home.jsx`** — Public marketing/landing page, static hero + CTA button to `/add`. Not auth-gated itself. `known` → [[protected-routing]].
 - **`src/pages/AddVerse.jsx`** — Form for reference/text/translation; validates non-empty, calls `saveVerse`, navigates to `/verses`. `known`.
 - **`src/pages/VerseList.jsx`** — Fetches all verses, renders `ProgressBar` + a `VerseCard` per verse, toggle to filter to due-only via `getDueVerses`. `parked`.
-- **`src/pages/Practice.jsx`** — Finds one verse by `:id`, hides the text as underscores sized to word length, reveals on request, then user self-rates 1-4. On rate: runs `calculateNextReview`, saves via `Promise.all([updateVerse, logReview])`. **Known product gap:** no typed-recall checking — purely self-report. `known` → [[sm2-algorithm]], [[self-report-practice]].
+- **`src/pages/Practice.jsx`** — Finds one verse by `:id`, hides the text while the user types their attempt into a textarea. On Submit (`handleSubmitAttempt`): scores the attempt (`scoreAttempt`/`compareWords`), auto-determines the rating (`percentageToRating`), and shows a results view — the user's typed words (misses in red), a plain "Correct version" box, and the score/rating — without saving or navigating yet. On Continue (`handleRate`, unchanged): runs `calculateNextReview`, saves via `Promise.all([updateVerse, logReview])`, navigates to `/verses`. Rebuilt 2026-07-31, closing the self-report gap. `known` → [[sm2-algorithm]], [[self-report-practice]], [[percentage-to-rating-mapping]].
 
 ## Components
 

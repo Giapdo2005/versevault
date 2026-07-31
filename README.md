@@ -11,7 +11,8 @@ VerseVault is a full-stack scripture memorization platform that uses the SM-2 sp
 ## Features
 
 - 📖 Store and organize Bible verses
-- 🧠 Review verses using the SM-2 spaced repetition algorithm
+- ⌨️ Typed-recall practice — type the verse from memory, get scored word-by-word, and see exactly what you got right vs. wrong
+- 🧠 Spaced repetition scheduling (SM-2 algorithm) driven automatically by your recall score
 - 📧 Automatic email reminders powered by Celery
 - 🔐 Secure authentication and Row-Level Security via Supabase
 - ⚡ Horizontally scalable background workers with Redis
@@ -21,7 +22,7 @@ VerseVault is a full-stack scripture memorization platform that uses the SM-2 sp
 
 VerseVault is two systems wforking together:
 
-1. **The app** (React + Supabase) — where you add verses, organize them, and practice. Practice sessions use the [SM-2 spaced repetition algorithm](https://en.wikipedia.org/wiki/SuperMemo#Description_of_SM-2_algorithm): after each review you rate how well you recalled the verse (Again / Hard / Good / Easy), and that rating determines how soon it comes back for review — struggle with it and it resurfaces sooner, recall it easily and the interval grows.
+1. **The app** (React + Supabase) — where you add verses, organize them, and practice. Practice is typed-recall: you type the verse from memory, and it's scored word-by-word against the real text (case-insensitive, with partial credit for punctuation-only mismatches). The resulting percentage is mapped onto the [SM-2 spaced repetition algorithm](https://en.wikipedia.org/wiki/SuperMemo#Description_of_SM-2_algorithm)'s 1-5 rating scale automatically — no self-reporting — which determines how soon the verse comes back for review — struggle with it and it resurfaces sooner, recall it well and the interval grows.
 2. **The reminder scheduler** (Python + Celery + Redis) — a separate backend service that runs on its own clock. Every hour, it checks which verses are due for review and haven't been reminded about in the last day, and sends a real email for each one via [Resend](https://resend.com). It talks directly to the same Supabase Postgres database as the frontend, so there's one source of truth, not two databases to keep in sync.
 
 ## Architecture
@@ -133,11 +134,10 @@ docker compose up --build --scale worker=N   # run N worker containers instead o
 npm test
 ```
 
-Covers the spaced repetition algorithm and the typed-recall scoring function.
+Covers the spaced repetition algorithm, the typed-recall scoring function, and the percentage-to-rating mapping.
 
 ## Roadmap
 
-- Typed-recall practice — type the verse from memory instead of self-rating; the scoring engine (`scoreAttempt.js`) is built and tested, UI integration is next.
 - Retry/backoff handling for failed email sends.
 - Flower dashboard for live task/worker monitoring.
 - Friends/social feature.

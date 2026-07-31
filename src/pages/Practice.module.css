@@ -54,6 +54,22 @@
   font-style: normal;
 }
 
+.typedInput {
+  width: 100%;
+  min-height: 140px;
+  padding: var(--space-4);
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--color-navy);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  resize: vertical;
+}
+
+.typedInput:disabled { opacity: 0.6; }
+
 .revealButton {
   padding: var(--space-3) var(--space-12);
   background-color: var(--color-navy);
@@ -130,3 +146,6 @@
 .ratingEasy  { background-color: #DCFCE7; color: #15803D; }
 
 .notFound { color: var(--color-muted); }
+
+/* --- Word-by-word comparison: only true misses get flagged --- */
+.wordMiss { color: #B91C1C; }
