@@ -4,9 +4,8 @@ VerseVault is a full-stack scripture memorization platform that uses the SM-2 sp
 
 ## Status
 
-- **Frontend + Supabase backend** — done, running.
-- **Email reminder backend** (Python/Celery/Redis) — built, tested, and fully containerized locally (`docker compose up`).
-- **Cloud deployment** — in progress. This section will be updated with a live URL once the backend is running on a real server instead of just locally.
+- **Frontend** — **live at [versevault-seven.vercel.app](https://versevault-seven.vercel.app)**, deployed via Vercel.
+- **Email reminder backend** (Python/Celery/Redis) — built, tested, and fully containerized locally (`docker compose up`). Cloud VM deployment in progress — this line will be updated once it's running on a real server instead of just locally.
 
 ## Features
 

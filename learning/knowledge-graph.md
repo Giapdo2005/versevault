@@ -343,9 +343,9 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence:** Named in Section 15's concept list; not yet taught.
 
 ### secrets-in-production
-**Status:** seed
+**Status:** introduced
 **Depends on:** cloud-vm-setup, credentials-management
-**Evidence:** Named in Section 15's concept list; not yet taught.
+**Evidence (2026-07-31):** First real production secret handled: Supabase env vars set on Vercel for the live frontend deploy. A hand-retyped copy of the anon key was manually verified with a byte-for-byte shell diff (not eyeballing a 150-character base64 string) and caught as genuinely wrong before it shipped — same instinct as [[credential-leak-response]], verify rather than trust a transcription. Fixed by piping the value directly from the source `.env` file into `vercel env add` instead of retyping.
 
 ### least-privilege-containers
 **Status:** introduced
