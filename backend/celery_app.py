@@ -13,6 +13,7 @@ import psycopg2
 from celery import Celery
 from dotenv import load_dotenv
 import resend
+from resend.exceptions import RateLimitError, ApplicationError
 from celery.schedules import crontab
 
 
@@ -37,14 +38,20 @@ app.conf.beat_schedule = {
 @app.task
 def send_test_email(to_address):
     resend.Emails.send({
-        "from": "onboarding@resend.dev",  # Resend's default sender for unverified accounts
+        "from": "onboarding@resend.dev", 
         "to": to_address,
         "subject": "VerseVault test email",
         "html": "<p>This email was sent by a Celery worker.</p>",
     })
 
 
-@app.task
+@app.task(
+    autoretry_for=(RateLimitError, ApplicationError),  # transient — worth retrying
+    retry_backoff=5,       # first retry after ~5s, doubling each attempt (5s, 10s, 20s)
+    retry_backoff_max=60,  # cap, in case max_retries ever grows
+    retry_jitter=True,     # randomize slightly so simultaneous failures don't retry in lockstep
+    max_retries=3,
+)
 def send_reminder_email(verse_id, to_address, reference):
     # Each task gets its own fresh connection — tasks run in separate
     # worker processes, so a connection can't be shared across them.
@@ -58,7 +65,6 @@ def send_reminder_email(verse_id, to_address, reference):
         "html": f'<p>Your verse "{reference}" is due for review in VerseVault.</p>',
     })
 
-    # Only mark it as reminded now that the send above actually succeeded —
     # if Emails.send() had raised an exception, we'd never reach this line.
     cur.execute(
         'UPDATE verses SET last_reminded_at = NOW() WHERE id = %s',

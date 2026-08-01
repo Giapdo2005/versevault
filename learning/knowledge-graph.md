@@ -243,24 +243,24 @@ Statuses: `seed` (named but not yet demonstrated) → `introduced` (partially de
 **Evidence (2026-07-30):** Correctly reasoned about the design ("a user should get reminded daily... only if we've sent it successfully") before any code was written. First implementation attempt (`last_reminded_at <= NOW()`) didn't actually implement the "within the last day" guard — matched a wrong prediction pattern (looked plausible, didn't hold up when traced through). Corrected to `<= NOW() - interval '1 day'` once asked to trace what the original condition actually excluded (nothing — true forever once set). **Verified empirically, both directions:** watched a real email fire when due, then watched a second Beat cycle 60 seconds later correctly send nothing — proof the guard works, not just code that compiles.
 
 ### celery-retries
-**Status:** seed
+**Status:** practicing
 **Depends on:** celery-task
-**Evidence:** Named in Section 10's concept list; not yet taught.
+**Evidence (2026-07-31):** Correctly identified upfront that a naive design (retry every exception) was wrong once traced against a real example: a `ValidationError` (the actual `test@example.com` failure from Section 11) never changes between retry attempts, so retrying it is pure waste. Implemented via `resend.exceptions` inspection (not guessing) to split retryable (`RateLimitError`, `ApplicationError`) from permanent (`ValidationError`, `MissingRequiredFieldsError`, `MissingApiKeyError`, `InvalidApiKeyError`) failures, using Celery's `autoretry_for`. Not yet live-tested — deferred by choice to move on to hosting.
 
 ### exponential-backoff
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-retries
-**Evidence:** Named in Section 10's concept list; not yet taught.
+**Evidence (2026-07-31):** Proposed exponential backoff unprompted ("growing backoff so redis doesnt get hammered") before it was explained. Configured via Celery's `retry_backoff=5` (doubling: 5s/10s/20s), `retry_backoff_max`, and `retry_jitter` (to avoid many simultaneously-failing tasks retrying in lockstep). Not yet observed firing for real.
 
 ### dead-letter-handling
-**Status:** seed
+**Status:** introduced
 **Depends on:** celery-retries
-**Evidence:** Named in Section 10's concept list; not yet taught.
+**Evidence (2026-07-31):** Not implemented as a separate mechanism (no dead-letter queue/table) — decided the existing container logs plus the hourly `check_and_notify` re-check are sufficient visibility for this project's current maturity, rather than building dedicated failure-tracking infrastructure. A reasoned scope decision, not an oversight.
 
 ### at-least-once-delivery
-**Status:** seed
+**Status:** understood
 **Depends on:** idempotency, celery-retries
-**Evidence:** Named in Section 10's concept list; not yet taught.
+**Evidence (2026-07-31):** The strongest evidence of this whole section — pushed back on bounded retries with "shouldn't I go til success," then reasoned through it independently: traced what happens to `last_reminded_at` when a send fails (stays unset) and what `check_and_notify` does with that on its next hourly run (re-flags it as due), and concluded unprompted that this is already a system-level retry loop. This is the actual insight behind at-least-once delivery — a message queue's per-attempt retry doesn't have to guarantee eventual success alone when a higher-level, idempotency-guarded re-check already does.
 
 ### docker-basics
 **Status:** practicing

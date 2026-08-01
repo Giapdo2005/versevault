@@ -13,7 +13,7 @@ VerseVault is a full-stack scripture memorization platform that uses the SM-2 sp
 - 📖 Store and organize Bible verses
 - ⌨️ Typed-recall practice — type the verse from memory, get scored word-by-word, and see exactly what you got right vs. wrong
 - 🧠 Spaced repetition scheduling (SM-2 algorithm) driven automatically by your recall score
-- 📧 Automatic email reminders powered by Celery
+- 📧 Automatic email reminders powered by Celery, with automatic retry-with-backoff on transient failures
 - 🔐 Secure authentication and Row-Level Security via Supabase
 - ⚡ Horizontally scalable background workers with Redis
 - 🐳 Fully containerized backend with Docker Compose
@@ -72,6 +72,8 @@ The whole backend (Redis + Beat + however many worker containers) runs from one 
 **Row-Level Security instead of relying on application-code filtering.** Data isolation between users is enforced at the database layer via Postgres RLS policies (`auth.uid() = user_id`), not by remembering to add a `WHERE user_id = ...` clause in every query. This was tested directly — disabling the policy causes a real cross-user data leak, confirming the isolation actually depends on RLS and not on the application code getting it right every time.
 
 **A cloud VM over a managed platform, for now.** Deploying to a raw VM (SSH access, manual Docker setup) instead of a managed container platform is a deliberate choice to own the full deployment path directly, rather than have a platform abstract away the parts worth understanding.
+
+**Retry only what's actually transient.** Not every failed email send deserves a retry. Resend's SDK distinguishes error types by HTTP status — a `RateLimitError` (429) or `ApplicationError` (500) may well succeed a moment later, so those get retried automatically with exponential backoff (3 attempts, starting at 5s). A `ValidationError` (bad recipient address) or an invalid API key never will — retrying those just delays surfacing a real problem, so they fail immediately instead. On top of that, the hourly `check_and_notify` cycle is already a coarser, system-level retry: a verse that never got successfully reminded stays due and gets picked up again next cycle, so the per-task retry only needs to smooth over short blips, not guarantee eventual delivery on its own.
 
 ## Tech stack
 
@@ -138,6 +140,5 @@ Covers the spaced repetition algorithm, the typed-recall scoring function, and t
 
 ## Roadmap
 
-- Retry/backoff handling for failed email sends.
 - Flower dashboard for live task/worker monitoring.
 - Friends/social feature.
